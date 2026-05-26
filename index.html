@@ -319,7 +319,6 @@
       }
 
 
-      /* Final still section below */
       /* ════ FINAL 3D SECTION ════════════════════════════ */
       #final-section {
         height: 100vh;
@@ -329,202 +328,112 @@
         opacity: 0;
         transition: opacity 2s ease;
       }
-      #final-section.revealed {
-        opacity: 1;
-      }
+      #final-section.revealed { opacity: 1; }
+
+      /* iframe — pointer-events:none prevents scroll trap until activated */
       #final-iframe {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
         border: none;
-        display: block;
-      }
-      /* Text overlay on top of the 3D model */
-      #final-overlay-text {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding: 5rem 3.5rem 3rem;
-        z-index: 10;
         pointer-events: none;
-        background: linear-gradient(180deg, rgba(9,11,15,0.75) 0%, rgba(9,11,15,0) 100%);
-        opacity: 1;
-        transition: opacity 1.5s ease 2s;
       }
-      #final-section.revealed.interacted #final-overlay-text {
-        opacity: 0;
-      }
-      #final-num {
-        font-family: "Space Mono", monospace;
-        font-size: 0.6rem;
-        letter-spacing: 0.35em;
-        color: var(--rust);
-        text-transform: uppercase;
-        margin-bottom: 0.9rem;
-      }
-      #final-num::before {
-        content: "";
-        display: inline-block;
-        width: 2rem;
-        height: 1px;
-        background: var(--rust);
-        vertical-align: middle;
-        margin-right: 0.7rem;
-      }
-      #final-quote {
-        font-family: "Playfair Display", serif;
-        font-size: clamp(1.1rem, 2.2vw, 1.7rem);
-        font-style: italic;
-        font-weight: 400;
-        color: rgba(242,235,220,0.9);
-        line-height: 1.55;
-        max-width: 36rem;
-        margin: 0 0 0.7rem 0;
-        text-shadow: 0 2px 16px rgba(0,0,0,0.7);
-      }
-      #final-attr {
-        font-family: "Space Mono", monospace;
-        font-size: 0.58rem;
-        letter-spacing: 0.25em;
-        color: rgba(242,235,220,0.45);
-        text-transform: uppercase;
-      }
-      /* Bottom drag hint */
-      #final-hint {
+      #final-iframe.sf-active { pointer-events: auto; }
+
+      /* Click-to-activate overlay */
+      #sf-activate {
         position: absolute;
-        bottom: 2rem;
-        left: 50%;
-        transform: translateX(-50%);
+        inset: 0;
         z-index: 10;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: linear-gradient(180deg,
+          rgba(9,11,15,0.88) 0%,
+          rgba(9,11,15,0.25) 55%,
+          rgba(9,11,15,0.72) 100%);
+        transition: opacity 0.6s ease;
+      }
+      #sf-activate.hidden { opacity: 0; pointer-events: none; }
+
+      #sf-top {
+        padding: 3.5rem 4rem 0;
         pointer-events: none;
+      }
+      #sf-enter {
+        padding: 2.5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.5rem;
-        opacity: 0;
-        transition: opacity 1s ease;
+        gap: 0.8rem;
       }
-      #final-section.revealed #final-hint {
-        opacity: 1;
-        transition-delay: 2s;
-      }
-      #final-section.revealed.interacted #final-hint {
-        opacity: 0;
-        transition-delay: 0s;
-      }
-      #final-hint-icon {
-        width: 2.2rem;
-        height: 2.2rem;
-        border: 1px solid rgba(210,165,75,0.5);
+      #sf-enter-ring {
+        width: 4rem;
+        height: 4rem;
+        border: 1.5px solid rgba(210,165,75,0.55);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        animation: hint-pulse 2s ease-in-out infinite;
+        animation: sf-pulse 2.2s ease-in-out infinite;
+        transition: border-color 0.3s;
       }
-      #final-hint-icon svg {
-        width: 1rem;
-        height: 1rem;
-        stroke: rgba(210,165,75,0.8);
+      #sf-activate:hover #sf-enter-ring { border-color: rgba(210,165,75,0.9); }
+      @keyframes sf-pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(210,165,75,0.3); }
+        50%       { box-shadow: 0 0 0 14px rgba(210,165,75,0); }
+      }
+      #sf-enter-ring svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        stroke: rgba(210,165,75,0.85);
         fill: none;
         stroke-width: 1.5;
       }
-      #final-hint span {
+      #sf-enter-label {
         font-family: "Space Mono", monospace;
-        font-size: 0.55rem;
-        letter-spacing: 0.35em;
-        color: rgba(210,165,75,0.6);
+        font-size: 0.6rem;
+        letter-spacing: 0.45em;
+        color: rgba(210,165,75,0.88);
         text-transform: uppercase;
       }
-      @keyframes hint-pulse {
-        0%, 100% { box-shadow: 0 0 0 0 rgba(210,165,75,0.25); }
-        50% { box-shadow: 0 0 0 8px rgba(210,165,75,0); }
-      }
-      #final-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          105deg,
-          rgba(11, 12, 14, 0.82) 35%,
-          rgba(11, 12, 14, 0.2) 100%
-        );
-      }
-      #final-content {
-        position: relative;
-        z-index: 2;
-        max-width: 540px;
-        padding: 5rem 6rem;
-      }
-      .fin-num {
-        font-family: "Space Mono", monospace;
-        font-size: 0.58rem;
-        letter-spacing: 0.42em;
-        color: var(--rust);
-        text-transform: uppercase;
-        margin-bottom: 1.2rem;
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-      }
-      .fin-num::before {
-        content: "";
-        display: block;
-        width: 28px;
-        height: 1px;
-        background: var(--rust);
-      }
-      .fin-quote {
-        font-size: clamp(1.3rem, 2.5vw, 2rem);
-        font-style: italic;
-        font-weight: 400;
-        color: rgba(242, 235, 220, 0.88);
-        line-height: 1.45;
-        margin-bottom: 1.5rem;
-        position: relative;
-        padding-left: 1.2rem;
-      }
-      .fin-quote::before {
-        content: '"';
-        font-size: 6rem;
-        color: var(--gold);
-        opacity: 0.22;
-        position: absolute;
-        top: -2.2rem;
-        left: -0.8rem;
-        font-family: "Playfair Display", serif;
-        line-height: 1;
-      }
-      .fin-attr {
-        font-family: "Space Mono", monospace;
-        font-size: 0.58rem;
-        letter-spacing: 0.28em;
-        color: rgba(242, 235, 220, 0.38);
-        text-transform: uppercase;
-        margin-bottom: 2.5rem;
-      }
-      .fin-stats {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.6rem 1.5rem;
-      }
-      .fin-stat .slbl {
+      #sf-enter-sub {
         font-family: "Space Mono", monospace;
         font-size: 0.5rem;
-        letter-spacing: 0.3em;
-        color: var(--rust);
+        letter-spacing: 0.2em;
+        color: rgba(242,235,220,0.32);
         text-transform: uppercase;
-        margin-bottom: 0.18rem;
-      }
-      .fin-stat .sval {
-        font-family: "Playfair Display", serif;
-        font-size: 1.15rem;
-        font-style: italic;
-        color: var(--gold);
       }
 
-      /* ════ SPHERE INTRO ════════════════════════════════ */
+      /* EXIT button — top-right, shown when iframe is active */
+      #sf-exit {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 20;
+        background: rgba(9,11,15,0.88);
+        border: 1px solid rgba(210,165,75,0.35);
+        color: rgba(210,165,75,0.8);
+        font-family: "Space Mono", monospace;
+        font-size: 0.52rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        padding: 0.6rem 1.1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s, border-color 0.2s, color 0.2s;
+      }
+      #sf-exit.visible { opacity: 1; pointer-events: auto; }
+      #sf-exit:hover { border-color: rgba(210,165,75,0.75); color: rgba(210,165,75,1); }
+      #sf-exit svg { flex-shrink: 0; }
+
+            /* ════ SPHERE INTRO ════════════════════════════════ */
       #sphere-driver {
         height: 220vh;
         position: relative;
@@ -2190,43 +2099,50 @@
       })();
     </script>
 
-    <!-- ════ PHOTO REVEAL SECTION ════ -->
     <!-- ════ FINAL 3D SECTION ════ -->
     <div id="photo-section">
       <div id="final-section">
 
-        <!-- Sketchfab 3D interactive embed -->
+        <!-- 3D iframe — pointer-events:none prevents scroll trap until user activates -->
         <iframe
           id="final-iframe"
-          title="Sydney Opera House — Interactive 3D Model"
-          src="https://sketchfab.com/models/73267b70f8fd46a8a175bd51f1c77b1c/embed?autostart=1&preload=1&ui_controls=1&ui_infos=0&ui_inspector=0&ui_stop=0&ui_watermark=0&ui_watermark_link=0&ui_ar=0&ui_help=0&ui_settings=0&ui_vr=0&ui_fullscreen=1&ui_annotations=0&camera=0"
+          title="Sydney Opera House — Interactive 3D"
+          src="https://sketchfab.com/models/73267b70f8fd46a8a175bd51f1c77b1c/embed?autostart=1&preload=1&ui_controls=1&ui_infos=0&ui_inspector=0&ui_stop=0&ui_watermark=0&ui_watermark_link=0&ui_ar=0&ui_help=0&ui_settings=0&ui_vr=0&ui_fullscreen=1&ui_annotations=0&camera=0&dnt=1"
           allow="autoplay; fullscreen; xr-spatial-tracking"
           allowfullscreen
           mozallowfullscreen="true"
           webkitallowfullscreen="true">
         </iframe>
 
-        <!-- Text overlay (fades out when user starts interacting) -->
-        <div id="final-overlay-text">
-          <div id="final-num">VII &nbsp;·&nbsp; Legacy</div>
-          <p id="final-quote">
-            It is not possible to talk about the<br>
-            Sydney Opera House. It is only<br>
-            possible to talk about what it means.
-          </p>
-          <p id="final-attr">&mdash;&nbsp;Jørn Utzon &nbsp;·&nbsp; Pritzker Prize, 2003</p>
+        <!-- Activation overlay — clicking anywhere enters 3D mode -->
+        <div id="sf-activate">
+          <div id="sf-top">
+            <div class="fin-num">VII &nbsp;·&nbsp; Legacy</div>
+            <p class="fin-quote">
+              It is not possible to talk about the<br>
+              Sydney Opera House. It is only<br>
+              possible to talk about what it means.
+            </p>
+            <p class="fin-attr">&mdash;&nbsp;Jørn Utzon &nbsp;·&nbsp; Pritzker Prize, 2003</p>
+          </div>
+          <div id="sf-enter">
+            <div id="sf-enter-ring">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 12h14M14 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span id="sf-enter-label">EXPLORE IN 3D</span>
+            <span id="sf-enter-sub">Click to interact &nbsp;·&nbsp; drag to orbit &nbsp;·&nbsp; scroll to zoom</span>
+          </div>
         </div>
 
-        <!-- Drag hint (fades in after load, fades out after first interaction) -->
-        <div id="final-hint">
-          <div id="final-hint-icon">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="4"/>
-              <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
-            </svg>
-          </div>
-          <span>Drag to rotate &nbsp;·&nbsp; Scroll to zoom</span>
-        </div>
+        <!-- EXIT button shown only while 3D is active -->
+        <button id="sf-exit" aria-label="Exit 3D view">
+          <svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2.2">
+            <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/>
+          </svg>
+          EXIT &nbsp;/&nbsp; ESC
+        </button>
 
       </div>
     </div>
@@ -2530,23 +2446,39 @@
       if (!finalSection) return;
 
       // Fade in when section enters viewport
-      var obs = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) {
-          finalSection.classList.add("revealed");
-        }
+      var revObs = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) finalSection.classList.add("revealed");
       }, { threshold: 0.05 });
-      obs.observe(finalSection);
+      revObs.observe(finalSection);
 
-      // Mark as interacted once user touches the iframe (for hint fade-out)
-      var iframe = document.getElementById("final-iframe");
-      if (iframe) {
-        iframe.addEventListener("mousedown", function () {
-          finalSection.classList.add("interacted");
-        }, { once: true });
-        iframe.addEventListener("touchstart", function () {
-          finalSection.classList.add("interacted");
-        }, { once: true });
+      var iframe  = document.getElementById("final-iframe");
+      var overlay = document.getElementById("sf-activate");
+      var exitBtn = document.getElementById("sf-exit");
+
+      function enter3D() {
+        if (!iframe) return;
+        iframe.classList.add("sf-active");
+        if (overlay) overlay.classList.add("hidden");
+        if (exitBtn) exitBtn.classList.add("visible");
       }
+
+      function exit3D() {
+        if (!iframe) return;
+        iframe.classList.remove("sf-active");
+        if (overlay) overlay.classList.remove("hidden");
+        if (exitBtn) exitBtn.classList.remove("visible");
+      }
+
+      if (overlay) overlay.addEventListener("click", enter3D);
+      if (exitBtn) exitBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        exit3D();
+      });
+
+      // ESC key exits 3D mode from anywhere
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") exit3D();
+      });
     })();
   </script>
   </body>
