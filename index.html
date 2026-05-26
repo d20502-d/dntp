@@ -63,30 +63,67 @@
 
       /* ── INFO PANEL ───────────────────────────────────── */
       #info {
+        display: none;
+      }
+
+      /* ── NARRATIVE PANELS ────────────────────────────── */
+      #narrative {
         position: absolute;
-        left: 3.5vw;
-        bottom: 6.5rem;
-        width: clamp(260px, 28vw, 340px);
+        inset: 0;
         z-index: 10;
         pointer-events: none;
       }
-      .ph {
+      .np {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
         opacity: 0;
-        transform: translateY(14px);
-        transition: opacity 0.55s ease, transform 0.55s ease;
-        background: rgba(11, 12, 14, 0.72);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        transform: translateY(10px);
+        transition: opacity 0.48s ease, transform 0.48s ease;
+        background: rgba(11,12,14,0.84);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         border-left: 2px solid var(--rust);
-        padding: 1.4rem 1.6rem;
+        padding: 1.1rem 1.5rem;
+        max-width: 290px;
       }
-      .ph.on {
+      .np.on {
         opacity: 1;
         transform: none;
+      }
+      .np-cat {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.48rem;
+        letter-spacing: 0.38em;
+        color: var(--gold);
+        text-transform: uppercase;
+        margin-bottom: 0.38rem;
+      }
+      .np-year {
+        display: block;
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+        color: rgba(184,149,42,0.72);
+        line-height: 1;
+        margin-bottom: 0.32rem;
+      }
+      .np-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(0.85rem, 1.2vw, 1rem);
+        color: rgba(242,235,220,0.88);
+        line-height: 1.3;
+        margin-bottom: 0.65rem;
+      }
+      .np-body {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 0.95rem;
+        font-weight: 300;
+        line-height: 1.75;
+        color: rgba(242,235,220,0.65);
+        letter-spacing: 0.01em;
+        margin: 0;
+      }
+      .ph, .ph.on {
+        display: none;
       }
       .ph-stage {
         font-family: "Space Mono", monospace;
@@ -155,9 +192,10 @@
         pointer-events: none;
       }
       #ttl h1 {
-        font-size: clamp(0.75rem, 1.6vw, 1.05rem);
+        font-family: 'Space Mono', monospace;
+        font-size: clamp(0.65rem, 1.4vw, 0.9rem);
         font-weight: 400;
-        letter-spacing: 0.25em;
+        letter-spacing: 0.28em;
         color: rgba(242, 235, 220, 0.65);
         text-transform: uppercase;
       }
@@ -249,19 +287,7 @@
 
       /* ── YEAR TICKER ─────────────────────────────────── */
       #yr {
-        position: absolute;
-        right: 4vw;
-        top: 50%;
-        transform: translateY(-50%);
-        font-family: "Playfair Display", serif;
-        font-size: clamp(4rem, 8vw, 9rem);
-        font-style: italic;
-        color: rgba(184, 149, 42, 0.07);
-        line-height: 1;
-        z-index: 0;
-        pointer-events: none;
-        letter-spacing: 0.02em;
-        transition: opacity 0.3s;
+        display: none;
       }
 
       /* SVG material styles */
@@ -422,7 +448,7 @@
       /* floating title */
       #sph-title {
         position: absolute;
-        top: 50%;
+        top: 42%;
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
@@ -431,41 +457,55 @@
         transition: opacity 0.6s ease;
       }
       #sph-sup {
-        font-family: "Space Mono", monospace;
+        font-family: 'Space Mono', monospace;
         font-size: 0.58rem;
         letter-spacing: 0.42em;
         color: var(--rust);
         text-transform: uppercase;
-        margin-bottom: 0.9rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+      }
+      #sph-sup::before {
+        content: '';
+        display: block;
+        width: 28px;
+        height: 1px;
+        background: var(--rust);
       }
       #sph-h {
-        font-family: "Playfair Display", serif;
+        font-family: 'Playfair Display', serif;
         font-size: clamp(2.4rem, 6vw, 5rem);
         font-weight: 400;
-        font-style: italic;
+        font-style: normal;
         color: rgba(242, 235, 220, 0.0);
         line-height: 1.18;
         letter-spacing: 0.02em;
         margin-bottom: 1.2rem;
         transition: color 1.2s ease;
       }
+      #sph-h em { font-style: italic; color: var(--gold); }
       #sph-h.show { color: rgba(242, 235, 220, 0.88); }
       #sph-sub {
-        font-family: "Space Mono", monospace;
-        font-size: 0.58rem;
-        letter-spacing: 0.35em;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1rem;
+        font-weight: 300;
+        letter-spacing: 0.06em;
         color: rgba(242, 235, 220, 0.0);
-        text-transform: uppercase;
+        font-style: italic;
         transition: color 1.2s ease 0.3s;
+        margin-top: 3.8rem;
       }
-      #sph-sub.show { color: rgba(242, 235, 220, 0.35); }
+      #sph-sub.show { color: rgba(242, 235, 220, 0.45); }
       /* info cards */
       #sph-cards {
         position: absolute;
         right: 4vw;
-        top: 50%;
+        top: 66%;
         transform: translateY(-50%);
-        width: clamp(220px, 22vw, 300px);
+        width: clamp(270px, 26vw, 360px);
         z-index: 10;
         pointer-events: none;
       }
@@ -486,19 +526,31 @@
         transform: none;
       }
       .sc-tag {
-        font-family: "Space Mono", monospace;
-        font-size: 0.52rem;
-        letter-spacing: 0.32em;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.55rem;
+        letter-spacing: 0.35em;
         color: var(--rust);
         text-transform: uppercase;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+      .sc-tag::before {
+        content: '';
+        display: block;
+        width: 28px;
+        height: 1px;
+        background: var(--rust);
+        flex-shrink: 0;
       }
       .sc-body {
-        font-family: "Space Mono", monospace;
-        font-size: 0.57rem;
-        line-height: 1.75;
-        color: rgba(242, 235, 220, 0.42);
-        letter-spacing: 0.02em;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.05rem;
+        font-weight: 300;
+        line-height: 1.52;
+        color: rgba(242, 235, 220, 0.68);
+        letter-spacing: 0.01em;
       }
       /* scroll hint */
       #sph-scroll-hint {
@@ -698,7 +750,7 @@
       @keyframes b-pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
 
       /* ── TIMELINE ────────────────────────────────────── */
-      #timeline { background: var(--coal); padding: 7rem 4rem; }
+      #timeline { background: #2c2521; padding: 7rem 4rem; }
       .tlinner { max-width: 1100px; margin: 0 auto; }
       .tlhead { text-align: center; margin-bottom: 4rem; }
       .tlhead .cnum { justify-content: center; }
@@ -734,7 +786,7 @@
 
       /* ── SKETCH ──────────────────────────────────────── */
       #sketch {
-        background: var(--coal);
+        background: #191410;
         display: grid; grid-template-columns: 1fr 1fr;
         min-height: 100vh;
       }
@@ -830,7 +882,7 @@
 
       /* ── EPILOGUE ────────────────────────────────────── */
       #epilogue {
-        background: rgba(245,240,232,.25);
+        background: #2c2521;
         min-height: 100vh;
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
@@ -862,33 +914,34 @@
       }
 
       /* ── BLUEPRINT (b3) ──────────────────────────────── */
-      #blueprint { background: #141e2a; }
+      #blueprint { background: #200c06; }
       .bphead {
-        padding: 8rem 6rem 3rem; text-align: center;
+        padding: 8rem 6rem 4rem; text-align: center;
       }
-      .bphead .cnum { justify-content: center; color: #4a9fd4; }
+      .bphead .cnum { justify-content: center; color: var(--gold); }
       .bphead .cnum::before { display: none; }
-      .bphead .ctitle { color: #4a9fd4; }
-      .bphead .ctitle em { color: #7dcff5; }
-      .bphead .cbody { color: rgba(74,159,212,.8); max-width: 560px; margin: 0 auto; }
+      .bphead .ctitle { color: var(--cream); }
+      .bphead .ctitle em { color: var(--gold); }
+      .bphead .cbody { color: rgba(242,235,220,.62); max-width: 560px; margin: 0 auto; }
       .bpgrid {
-        display: grid; grid-template-columns: 1fr 1fr;
+        display: grid; grid-template-columns: 1fr;
       }
       .bpimg {
-        position: relative; overflow: hidden; aspect-ratio: 4/3;
+        position: relative; overflow: hidden; aspect-ratio: 16/9;
       }
       .bpimg img {
         width: 100%; height: 100%; object-fit: cover;
         transition: transform .6s;
+        filter: grayscale(.08) contrast(1.05);
       }
-      .bpimg:hover img { transform: scale(1.04); }
+      .bpimg:hover img { transform: scale(1.03); }
       .bpcap {
         position: absolute; bottom: 0; left: 0; right: 0;
-        padding: .8rem 1.2rem;
-        background: linear-gradient(transparent, rgba(20,30,42,.9));
+        padding: .8rem 1.4rem;
+        background: linear-gradient(transparent, rgba(32,12,6,.88));
         font-family: 'Space Mono', monospace;
         font-size: .58rem; letter-spacing: .18em;
-        color: #4a9fd4; text-transform: uppercase;
+        color: rgba(242,235,220,.65); text-transform: uppercase;
       }
 
       /* ── RESPONSIVE ──────────────────────────────────── */
@@ -900,7 +953,7 @@
         .compcontent { padding: 3rem 1.5rem; }
         .tltrack { flex-wrap: wrap; }
         .tlnode:nth-child(odd), .tlnode:nth-child(even) { padding-bottom: 2rem; padding-top: 0; flex-direction: column; }
-        .bpgrid { grid-template-columns: 1fr; }
+        .bpimg { aspect-ratio: 4/3; }
       }
 
     </style>
@@ -984,8 +1037,8 @@
     <section id="sketch">
       <div id="sketchImg">
         <img id="skImg"
-          src="https://images.unsplash.com/photo-1568952433726-3896e3881c65?w=900&q=80&auto=format&fit=crop"
-          alt="Architectural sketches">
+          src="sketch-utzon.png"
+          alt="Utzon's original pencil sketch">
       </div>
       <div class="stxt">
         <div class="cnum rv">I &nbsp;&middot;&nbsp; The Sketch</div>
@@ -1014,20 +1067,8 @@
       </div>
       <div class="bpgrid">
         <div class="bpimg rv">
-          <img id="bpImg1" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Structural drawings">
-          <div class="bpcap">Structural drawings &nbsp;&middot;&nbsp; Stage I</div>
-        </div>
-        <div class="bpimg rv d1">
-          <img id="bpImg2" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Shell geometry">
-          <div class="bpcap">Shell geometry &nbsp;&middot;&nbsp; 1961</div>
-        </div>
-        <div class="bpimg rv d2">
-          <img id="bpImg3" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Computer analysis">
-          <div class="bpcap">Arup &amp; Partners &nbsp;&middot;&nbsp; Computer analysis</div>
-        </div>
-        <div class="bpimg rv d3">
-          <img id="bpImg4" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Precast ribs">
-          <div class="bpcap">Precast ribbed panels &nbsp;&middot;&nbsp; 2,194 sections</div>
+          <img id="bpImg1" src="utzon-presentation.png" alt="Utzon presenting his design">
+          <div class="bpcap">Jørn Utzon &nbsp;&middot;&nbsp; Presenting entry #218 &nbsp;&middot;&nbsp; 1957</div>
         </div>
       </div>
     </section>
@@ -1039,8 +1080,8 @@
 
         <!-- floating title fades in at start -->
         <div id="sph-title">
-          <p id="sph-sup">Jørn Utzon &nbsp;·&nbsp; 1961</p>
-          <h2 id="sph-h">Every shell,<br>one sphere</h2>
+          <p id="sph-sup">III &nbsp;·&nbsp; The Shell Problem</p>
+          <h2 id="sph-h">Every shell,<br><em>one sphere</em></h2>
           <p id="sph-sub">Scroll to witness the breakthrough</p>
         </div>
 
@@ -1051,7 +1092,7 @@
             <div class="sc-body">Four years of failed attempts. Engineers couldn't find a mathematical formula to build the organic shell shapes Utzon had sketched.</div>
           </div>
           <div class="sph-card" id="sc1">
-            <div class="sc-tag">The Eureka · 1961</div>
+            <div class="sc-tag">The Solution · 1961</div>
             <div class="sc-body">Utzon discovered that every shell could be cut from the surface of a single sphere — radius 75.2 m. Suddenly 2,194 unique shapes became one.</div>
           </div>
           <div class="sph-card" id="sc2">
@@ -2172,6 +2213,50 @@
           </div>
         </div>
 
+        <!-- ═══ NARRATIVE PANELS ═══ -->
+        <div id="narrative">
+
+          <div class="np" id="np0">
+            <div class="np-cat">The Structure</div>
+            <span class="np-year">1959–1962</span>
+            <div class="np-title">The Foundation Rises</div>
+            <p class="np-body">Construction began on the massive concrete podium. This stage involved projecting the platform out into Sydney Harbour on approximately 588 concrete piers, providing the base for the massive shells to come.</p>
+          </div>
+
+          <div class="np" id="np1">
+            <span class="np-year">1963</span>
+            <div class="np-title">Section Through the Halls</div>
+            <p class="np-body">The longitudinal section revealed the complexity beneath the sails: two major performance halls and a stage tower rising through the roof, all supported by a labyrinth of over 1,000 rooms and functional spaces.</p>
+          </div>
+
+          <div class="np" id="np2">
+            <div class="np-cat">The Interior</div>
+            <span class="np-year">1963–1965</span>
+            <div class="np-title">A City Within a Building</div>
+            <p class="np-body">Below the shells, the design accommodated a vast program: 2 major halls, 5 rehearsal studios, and hundreds of dressing rooms and offices, creating a self-contained cultural city.</p>
+          </div>
+
+          <div class="np" id="np3">
+            <span class="np-year">1965</span>
+            <div class="np-title">The Ribs of the Shells</div>
+            <p class="np-body">The roof was constructed from 2,400 precast concrete segments forming 280 ribs. These were all derived from a single sphere with a radius of approximately 75 metres. The highest shell reaches 67 metres above sea level.</p>
+          </div>
+
+          <div class="np" id="np4">
+            <div class="np-cat">The Transition</div>
+            <span class="np-year">1966–1967</span>
+            <div class="np-title">The Departure</div>
+            <p class="np-body">Utzon resigned in 1966 due to political pressure and funding disputes, leaving Australia never to return. While the exterior geometry was precisely defined, a new team of architects was appointed to complete the interiors.</p>
+          </div>
+
+          <div class="np" id="np5">
+            <span class="np-year">1967–1972</span>
+            <div class="np-title">The Shells Complete</div>
+            <p class="np-body">By 1967, the last precast rib was placed, and the &ldquo;impossible&rdquo; silhouette finally stood whole above Sydney Harbour. The following years were dedicated to the complex installation of the glass walls and interior fit-outs.</p>
+          </div>
+
+        </div>
+
         <!-- ═══ PROGRESS BAR ═══ -->
         <div id="pbar-wrap">
           <div
@@ -2227,7 +2312,7 @@
         <!-- ═══ TOP TITLE ═══ -->
         <div id="ttl">
           <h1>Sydney Opera House</h1>
-          <p>Construction &nbsp;·&nbsp; 1959 – 1973</p>
+          <p>IV &nbsp;·&nbsp; Construction &nbsp;·&nbsp; 1959 – 1973</p>
         </div>
       </div>
       <!-- /stage -->
@@ -2237,7 +2322,7 @@
     <!-- ════ b6 · CONSTRUCTION COST ════ -->
     <section id="construction">
       <div id="conImg">
-        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80&auto=format&fit=crop" alt="Construction site">
+        <img src="soh-harbour.png" alt="Sydney Opera House with Harbour Bridge">
       </div>
       <div class="contxt">
         <div class="cnum rv">V &nbsp;&middot;&nbsp; The Build</div>
@@ -2305,10 +2390,21 @@
           });
         }
 
-        // Show/hide phases
+        // Show/hide phases (legacy, #info hidden)
         var phases = ["ph0", "ph1", "ph2", "ph3", "ph4", "ph5"];
         function showPhase(i) {
           phases.forEach(function (id, j) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            if (j === i) el.classList.add("on");
+            else el.classList.remove("on");
+          });
+        }
+
+        // Narrative panels
+        var narratives = ["np0","np1","np2","np3","np4","np5"];
+        function showNarrative(i) {
+          narratives.forEach(function(id, j) {
             var el = document.getElementById(id);
             if (!el) return;
             if (j === i) el.classList.add("on");
@@ -2379,15 +2475,21 @@
             el.style.opacity = String(craneOp * 0.45);
           });
 
-          // ─ Phase 0 (0–0.10) ─
-          if (p < 0.1) showPhase(0);
+          // ─ Narrative panels ─
+          var npIdx = -1;
+          if      (p >= 0.10 && p < 0.28) npIdx = 0;
+          else if (p >= 0.28 && p < 0.42) npIdx = 1;
+          else if (p >= 0.42 && p < 0.54) npIdx = 2;
+          else if (p >= 0.54 && p < 0.66) npIdx = 3;
+          else if (p >= 0.66 && p < 0.78) npIdx = 4;
+          else if (p >= 0.78 && p < 0.94) npIdx = 5;
+          showNarrative(npIdx);
 
           // ─ Podium (0.10–0.25) ─
           var podP = seg(p, 0.1, 0.25);
           var gPod = document.getElementById("g-pod");
           gPod.style.opacity = String(eo(podP));
           clip("r-pod", 465, 414, podP);
-          if (p >= 0.1 && p < 0.3) showPhase(1);
           dimOp(
             ["dl-w", "dl-wa", "dl-wb", "dt-w"],
             cl(seg(p, 0.14, 0.22) - seg(p, 0.75, 0.85))
@@ -2420,7 +2522,6 @@
             ["rb-c3-1", "rb-c3-2", "rb-c3-3", "rb-c3-4", "rb-c3-5"],
             seg(p, 0.36, 0.46)
           );
-          if (p >= 0.25 && p < 0.52) showPhase(2);
           dimOp(
             ["dl-h1", "dl-h1a", "dl-h1b", "dt-h1"],
             cl(seg(p, 0.26, 0.34) - seg(p, 0.72, 0.82))
@@ -2454,7 +2555,6 @@
             seg(p, 0.66, 0.74)
           );
           clip("r-ot3", 440, 258, seg(p, 0.7, 0.78));
-          if (p >= 0.52 && p < 0.77) showPhase(3);
           document.getElementById("g-glass-ot").style.opacity = String(
             seg(p, 0.74, 0.82)
           );
@@ -2467,7 +2567,6 @@
           clip("r-rs", 440, 352, seg(p, 0.8, 0.87));
 
           // ─ TILE CLADDING (0.84–0.95) ─
-          if (p >= 0.77 && p < 0.92) showPhase(4);
           var tileP = seg(p, 0.84, 0.96);
 
           // For each shell: clip the tile overlay to same extent as concrete
@@ -2511,7 +2610,6 @@
           });
 
           // ─ Completion (0.94–1.0) ─
-          if (p >= 0.92) showPhase(5);
           var compP = seg(p, 0.93, 1.0);
           document.getElementById("g-refl").style.opacity = String(
             eo(compP) * 0.85
@@ -2561,6 +2659,79 @@
             window.scrollTo({ top: scrollerTop + ratio * driverH, behavior: "auto" });
           });
       })();
+
+    /* ── NARRATIVE PANEL POSITIONING ──────────────────────
+       Two allowed zones:
+         TOP    – sky band above the shells  (SVG y ≈ 55)
+         BOTTOM – dark strip below SVG content, above progress bar
+       Panels alternate left/right within each zone. */
+    (function() {
+      var placements = [
+        { id:'np0', zone:'top', side:'right' },
+        { id:'np1', zone:'top', side:'right' },
+        { id:'np2', zone:'top', side:'right' },
+        { id:'np3', zone:'top', side:'right' },
+        { id:'np4', zone:'top', side:'right' },
+        { id:'np5', zone:'top', side:'right' },
+      ];
+      var SVG_W = 1200, SVG_H = 680;
+      var PBAR_H = 54; // px: progress bar height to leave clear at bottom
+
+      function place() {
+        var stage = document.getElementById('stage');
+        var W = stage.offsetWidth, H = stage.offsetHeight;
+        var scale, ox, oy;
+        if (W / H >= SVG_W / SVG_H) {
+          scale = H / SVG_H; ox = (W - SVG_W * scale) / 2; oy = 0;
+        } else {
+          scale = W / SVG_W; ox = 0; oy = (H - SVG_H * scale) / 2;
+        }
+
+        // SVG content bounding box in stage pixels
+        var svgLeft   = Math.max(0, ox);
+        var svgRight  = Math.min(W, ox + SVG_W * scale);
+        var svgTop    = oy;                         // top of drawn content
+        var svgBottom = oy + SVG_H * scale;         // bottom of drawn content
+
+        // Horizontal margins inside SVG content edge
+        var hPad = Math.max(14, 18 * scale);
+        var panelW = Math.min(340, (svgRight - svgLeft) * 0.36);
+
+        placements.forEach(function(p) {
+          var el = document.getElementById(p.id);
+          if (!el) return;
+          el.style.maxWidth = panelW + 'px';
+
+          // ── Horizontal ──────────────────────────────────
+          if (p.side === 'left') {
+            el.style.right = '';
+            el.style.left  = (svgLeft + hPad) + 'px';
+          } else {
+            el.style.left  = '';
+            el.style.right = (W - svgRight + hPad) + 'px';
+          }
+
+          // ── Vertical ────────────────────────────────────
+          if (p.zone === 'top') {
+            // Pin just below the title bar, regardless of SVG scale
+            var ttl = document.getElementById('ttl');
+            var ttlBottom = ttl
+              ? ttl.getBoundingClientRect().bottom - stage.getBoundingClientRect().top
+              : 80;
+            el.style.bottom = '';
+            el.style.top    = (ttlBottom + 16) + 'px';
+          } else {
+            // Below SVG drawn content (black band), above progress bar
+            el.style.top    = '';
+            el.style.bottom = PBAR_H + 'px';
+          }
+        });
+      }
+
+      if (document.readyState === 'complete') place();
+      else window.addEventListener('load', place);
+      window.addEventListener('resize', place);
+    })();
     </script>
 
     <!-- ════ SCROLL-DRIVEN VIDEO SECTION ════ -->
