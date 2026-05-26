@@ -265,14 +265,15 @@
       /* SVG material styles */
       .sh-outline {
         fill: none;
-        stroke: rgba(242, 235, 220, 0.5);
-        stroke-width: 0.7;
+        stroke: rgba(210, 165, 75, 0.65);
+        stroke-width: 0.9;
         stroke-linejoin: round;
+        filter: drop-shadow(0 0 2px rgba(210,165,75,0.4));
       }
       .rib-line {
         fill: none;
-        stroke: #c8b890;
-        stroke-width: 0.9;
+        stroke: rgba(200, 155, 60, 0.75);
+        stroke-width: 0.85;
         stroke-linecap: round;
         opacity: 0;
       }
@@ -291,7 +292,7 @@
       }
       .crane-l {
         fill: none;
-        stroke: rgba(90, 159, 212, 0.28);
+        stroke: rgba(200, 155, 60, 0.35);
         stroke-width: 1.1;
         opacity: 0;
       }
@@ -306,7 +307,7 @@
         fill: none;
       }
       .water-r {
-        stroke: rgba(242, 235, 220, 0.06);
+        stroke: rgba(130, 150, 180, 0.08);
         stroke-width: 0.8;
         fill: none;
       }
@@ -557,6 +558,18 @@
       }
 
 
+      /* ════ MUTATION CANVAS ═════════════════════════════ */
+      #mutation-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.1s;
+      }
+
       /* ════ TIMELINE SLIDER ══════════════════════════════ */
       #tl-wrap {
         position: absolute;
@@ -686,6 +699,7 @@
 
     <div id="scroller">
       <div id="stage">
+        <canvas id="mutation-canvas"></canvas>
         <div id="yr">1957</div>
 
         <!-- ═══ SVG MAIN ═══ -->
@@ -754,16 +768,16 @@
 
             <!-- ── GRADIENTS ── -->
             <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#080a0d" />
-              <stop offset="100%" stop-color="#0e1520" />
+              <stop offset="0%" stop-color="#090b0f" />
+              <stop offset="100%" stop-color="#0c0e14" />
             </linearGradient>
             <linearGradient id="g-water" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#0c1e33" />
-              <stop offset="100%" stop-color="#060d1a" />
+              <stop offset="0%" stop-color="#080c14" />
+              <stop offset="100%" stop-color="#040609" />
             </linearGradient>
             <linearGradient id="g-podtop" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#9c7550" />
-              <stop offset="100%" stop-color="#7a5a38" />
+              <stop offset="0%" stop-color="#3a3630" />
+              <stop offset="100%" stop-color="#252220" />
             </linearGradient>
             <linearGradient id="g-ch1" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stop-color="#d0cec8" />
@@ -817,79 +831,9 @@
               <circle cx="3" cy="13" r=".45" fill="rgba(0,0,0,.04)" />
             </pattern>
 
-            <!-- Höganäs ceramic tiles: 2-type chevron (matte buff + gloss white) -->
-            <pattern
-              id="p-tiles"
-              width="20"
-              height="14"
-              patternUnits="userSpaceOnUse"
-            >
-              <!-- Matte buff tiles -->
-              <rect
-                x=".8"
-                y=".8"
-                width="8.4"
-                height="5.9"
-                fill="#f0ece3"
-                rx=".4"
-              />
-              <rect
-                x=".8"
-                y="8.3"
-                width="8.4"
-                height="5.9"
-                fill="#f2ede4"
-                rx=".4"
-              />
-              <!-- Gloss white tiles (brighter) -->
-              <rect
-                x="10.8"
-                y=".8"
-                width="8.4"
-                height="5.9"
-                fill="#f8f5ee"
-                rx=".4"
-              />
-              <rect
-                x="10.8"
-                y="8.3"
-                width="8.4"
-                height="5.9"
-                fill="#f6f3ec"
-                rx=".4"
-              />
-              <!-- Grout lines -->
-              <rect
-                width="20"
-                height="14"
-                fill="none"
-                stroke="rgba(175,162,148,.45)"
-                stroke-width=".9"
-              />
-              <line
-                x1="10"
-                y1="0"
-                x2="10"
-                y2="14"
-                stroke="rgba(175,162,148,.4)"
-                stroke-width=".8"
-              />
-              <line
-                x1="0"
-                y1="7"
-                x2="10"
-                y2="7"
-                stroke="rgba(175,162,148,.35)"
-                stroke-width=".7"
-              />
-              <line
-                x1="10"
-                y1="7"
-                x2="20"
-                y2="7"
-                stroke="rgba(175,162,148,.35)"
-                stroke-width=".7"
-              />
+            <!-- Smooth ceramic shell fill (no grid) -->
+            <pattern id="p-tiles" width="20" height="14" patternUnits="userSpaceOnUse">
+              <rect width="20" height="14" fill="#ece8df"/>
             </pattern>
 
             <!-- Granite podium (warm grey with stratification) -->
@@ -1119,7 +1063,7 @@
               y="452"
               width="952"
               height="13"
-              fill="#5c3e28"
+              fill="#2a2622"
               clip-path="url(#cl-pod)"
             />
             <rect
@@ -1127,7 +1071,7 @@
               y="440"
               width="928"
               height="13"
-              fill="#6b4830"
+              fill="#312e29"
               clip-path="url(#cl-pod)"
             />
             <rect
@@ -1135,7 +1079,7 @@
               y="428"
               width="904"
               height="13"
-              fill="#7a5438"
+              fill="#383430"
               clip-path="url(#cl-pod)"
             />
             <rect
@@ -2290,13 +2234,13 @@
         <div id="tl-sketch-overlay">
           <svg viewBox="0 0 1200 680" preserveAspectRatio="xMidYMid meet">
             <rect width="1200" height="680" fill="rgba(11,12,14,0.0)"/>
-            <path d="M 130 440 C 118 325 148 160 242 72 C 258 56 272 52 290 60 C 330 82 420 292 502 440 Z" fill="none" stroke="rgba(242,235,220,0.7)" stroke-width="1.2"/>
-            <path d="M 242 440 C 234 356 256 225 322 150 C 336 134 355 130 372 140 C 408 160 506 342 558 440 Z" fill="none" stroke="rgba(242,235,220,0.65)" stroke-width="1"/>
-            <path d="M 380 440 C 375 390 390 318 430 270 C 443 255 458 252 472 260 C 500 275 546 370 568 440 Z" fill="none" stroke="rgba(242,235,220,0.6)" stroke-width="0.9"/>
-            <path d="M 600 440 C 590 362 614 235 672 165 C 685 148 700 144 716 153 C 748 170 832 348 876 440 Z" fill="none" stroke="rgba(242,235,220,0.65)" stroke-width="1"/>
-            <path d="M 700 440 C 694 380 712 295 752 242 C 763 228 777 224 790 232 C 818 248 876 370 900 440 Z" fill="none" stroke="rgba(242,235,220,0.6)" stroke-width="0.9"/>
-            <path d="M 838 440 C 834 407 845 368 872 345 C 880 338 888 337 896 342 C 912 352 942 400 950 440 Z" fill="none" stroke="rgba(242,235,220,0.5)" stroke-width="0.8"/>
-            <line x1="84" y1="440" x2="1035" y2="440" stroke="rgba(242,235,220,0.4)" stroke-width="0.8"/>
+            <path d="M 130 440 C 118 325 148 160 242 72 C 258 56 272 52 290 60 C 330 82 420 292 502 440 Z" fill="none" stroke="rgba(210,165,75,0.75)" stroke-width="1.2"/>
+            <path d="M 242 440 C 234 356 256 225 322 150 C 336 134 355 130 372 140 C 408 160 506 342 558 440 Z" fill="none" stroke="rgba(210,165,75,0.65)" stroke-width="1"/>
+            <path d="M 380 440 C 375 390 390 318 430 270 C 443 255 458 252 472 260 C 500 275 546 370 568 440 Z" fill="none" stroke="rgba(210,165,75,0.6)" stroke-width="0.9"/>
+            <path d="M 600 440 C 590 362 614 235 672 165 C 685 148 700 144 716 153 C 748 170 832 348 876 440 Z" fill="none" stroke="rgba(210,165,75,0.65)" stroke-width="1"/>
+            <path d="M 700 440 C 694 380 712 295 752 242 C 763 228 777 224 790 232 C 818 248 876 370 900 440 Z" fill="none" stroke="rgba(210,165,75,0.6)" stroke-width="0.9"/>
+            <path d="M 838 440 C 834 407 845 368 872 345 C 880 338 888 337 896 342 C 912 352 942 400 950 440 Z" fill="none" stroke="rgba(210,165,75,0.5)" stroke-width="0.8"/>
+            <line x1="84" y1="440" x2="1035" y2="440" stroke="rgba(210,165,75,0.4)" stroke-width="0.8"/>
             <!-- Blueprint grid lines -->
             <line x1="0" y1="300" x2="1200" y2="300" stroke="rgba(42,90,140,0.15)" stroke-width="0.5" stroke-dasharray="4 4"/>
             <line x1="0" y1="200" x2="1200" y2="200" stroke="rgba(42,90,140,0.15)" stroke-width="0.5" stroke-dasharray="4 4"/>
@@ -2577,6 +2521,116 @@
 
       slider.addEventListener("input", updateSlider);
       updateSlider();
+    })();
+    </script>
+
+    <!-- ════ GREAT MUTATION EFFECT ════ -->
+    <script>
+    (function () {
+      "use strict";
+
+      var canvas = document.getElementById("mutation-canvas");
+      var scroller = document.getElementById("scroller");
+      var sphereDriver = document.getElementById("sphere-driver");
+      if (!canvas || !scroller) return;
+
+      var ctx = canvas.getContext("2d");
+      var finalImg = document.querySelector("#final-bg img");
+
+      function resize() {
+        canvas.width  = canvas.offsetWidth  || window.innerWidth;
+        canvas.height = canvas.offsetHeight || window.innerHeight;
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      function cl(t) { return Math.max(0, Math.min(1, t)); }
+      function eo(t) { return 1 - Math.pow(1 - cl(t), 3); }
+
+      function draw() {
+        var sphereH = sphereDriver ? sphereDriver.offsetHeight : 0;
+        var relScroll = window.scrollY - sphereH;
+        var scrollH   = scroller.scrollHeight - window.innerHeight;
+
+        // p = progress through construction section only (0..1)
+        var p = cl(relScroll / scrollH);
+
+        // Mutation starts at 88%, completes at 100%
+        var mutP = cl((p - 0.88) / 0.12);
+
+        if (mutP <= 0) {
+          canvas.style.opacity = "0";
+          return;
+        }
+        canvas.style.opacity = "1";
+
+        var w  = canvas.width;
+        var h  = canvas.height;
+        var cx = w * 0.5;
+        var cy = h * 0.42;
+        var maxR = Math.hypot(cx, cy) * 1.15;
+        var r  = eo(mutP) * maxR;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // ── Photo reveal inside expanding circle ──────────────────
+        if (finalImg && finalImg.naturalWidth > 0) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.clip();
+          // Draw photo to fill canvas
+          var iw = finalImg.naturalWidth;
+          var ih = finalImg.naturalHeight;
+          var scale = Math.max(w / iw, h / ih);
+          var dw = iw * scale, dh = ih * scale;
+          var dx = (w - dw) * 0.5, dy = (h - dh) * 0.5;
+          ctx.globalAlpha = eo(mutP);
+          ctx.drawImage(finalImg, dx, dy, dw, dh);
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        }
+
+        // ── Golden ripple ring at the leading edge ────────────────
+        var ringW = Math.max(12, r * 0.07);
+        if (r > 4 && mutP < 0.98) {
+          var grad = ctx.createRadialGradient(
+            cx, cy, Math.max(0, r - ringW * 1.8),
+            cx, cy, r + ringW * 0.6
+          );
+          grad.addColorStop(0,    "rgba(200,160,60,0)");
+          grad.addColorStop(0.35, "rgba(220,175,80,0.4)");
+          grad.addColorStop(0.6,  "rgba(255,220,120,0.9)");
+          grad.addColorStop(0.8,  "rgba(240,200,90,0.7)");
+          grad.addColorStop(1,    "rgba(200,160,60,0)");
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(cx, cy, r + ringW * 0.6, 0, Math.PI * 2);
+          ctx.arc(cx, cy, Math.max(0, r - ringW * 1.8), 0, Math.PI * 2, true);
+          ctx.fillStyle = grad;
+          ctx.fill("evenodd");
+          ctx.restore();
+        }
+
+        // ── Dark vignette outside circle fades SVG to black ──────
+        if (mutP > 0.1) {
+          var vigP = cl((mutP - 0.1) / 0.5);
+          var vig = ctx.createRadialGradient(cx, cy, r * 0.7, cx, cy, maxR);
+          vig.addColorStop(0, "rgba(9,11,15,0)");
+          vig.addColorStop(1, "rgba(9,11,15," + (vigP * 0.85) + ")");
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2, true);
+          ctx.rect(0, 0, w, h);
+          ctx.fillStyle = vig;
+          ctx.fill("evenodd");
+          ctx.restore();
+        }
+      }
+
+      window.addEventListener("scroll", draw, { passive: true });
+      draw();
     })();
     </script>
   </body>
