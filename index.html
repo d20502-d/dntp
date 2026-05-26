@@ -323,7 +323,7 @@
 
       /* ════ SCROLL-DRIVEN VIDEO SECTION ══════════════════ */
       #video-driver {
-        height: 500vh;
+        height: 650vh;
         position: relative;
         background: #090b0f;
       }
@@ -640,7 +640,17 @@
       #heroBg {
         position: absolute; inset: 0;
         background-size: cover; background-position: center;
-        opacity: .38; transform: scale(1.08);
+        opacity: .22; transform: scale(1.08);
+      }
+      /* Extra dark vignette keeps hero dramatic without breaking the aesthetic */
+      #hero::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse at center,
+          rgba(9,11,15,0.10) 0%,
+          rgba(9,11,15,0.55) 100%
+        );
+        z-index: 1;
       }
       #hc { position: relative; z-index: 3; text-align: center; padding: 2rem; }
       .hl {
@@ -820,7 +830,7 @@
 
       /* ── EPILOGUE ────────────────────────────────────── */
       #epilogue {
-        background: #000;
+        background: rgba(245,240,232,.25);
         min-height: 100vh;
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
@@ -851,6 +861,36 @@
         margin-top: 2.5rem; display: block;
       }
 
+      /* ── BLUEPRINT (b3) ──────────────────────────────── */
+      #blueprint { background: #141e2a; }
+      .bphead {
+        padding: 8rem 6rem 3rem; text-align: center;
+      }
+      .bphead .cnum { justify-content: center; color: #4a9fd4; }
+      .bphead .cnum::before { display: none; }
+      .bphead .ctitle { color: #4a9fd4; }
+      .bphead .ctitle em { color: #7dcff5; }
+      .bphead .cbody { color: rgba(74,159,212,.8); max-width: 560px; margin: 0 auto; }
+      .bpgrid {
+        display: grid; grid-template-columns: 1fr 1fr;
+      }
+      .bpimg {
+        position: relative; overflow: hidden; aspect-ratio: 4/3;
+      }
+      .bpimg img {
+        width: 100%; height: 100%; object-fit: cover;
+        transition: transform .6s;
+      }
+      .bpimg:hover img { transform: scale(1.04); }
+      .bpcap {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        padding: .8rem 1.2rem;
+        background: linear-gradient(transparent, rgba(20,30,42,.9));
+        font-family: 'Space Mono', monospace;
+        font-size: .58rem; letter-spacing: .18em;
+        color: #4a9fd4; text-transform: uppercase;
+      }
+
       /* ── RESPONSIVE ──────────────────────────────────── */
       @media (max-width: 850px) {
         #sketch, #construction { grid-template-columns: 1fr; }
@@ -860,6 +900,7 @@
         .compcontent { padding: 3rem 1.5rem; }
         .tltrack { flex-wrap: wrap; }
         .tlnode:nth-child(odd), .tlnode:nth-child(even) { padding-bottom: 2rem; padding-top: 0; flex-direction: column; }
+        .bpgrid { grid-template-columns: 1fr; }
       }
 
     </style>
@@ -874,6 +915,7 @@
       <div class="ndot on"  data-t="hero"></div>
       <div class="ndot"     data-t="timeline"></div>
       <div class="ndot"     data-t="sketch"></div>
+      <div class="ndot"     data-t="blueprint"></div>
       <div class="ndot"     data-t="sphere-driver"></div>
       <div class="ndot"     data-t="scroller"></div>
       <div class="ndot"     data-t="construction"></div>
@@ -959,6 +1001,33 @@
           <div class="flabel">Prize Awarded</div>
           <div class="fval">&pound;5,000</div>
           <div class="fdesc">Australian pounds &nbsp;&middot;&nbsp; January 1957</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ b3 · BLUEPRINT ════ -->
+    <section id="blueprint">
+      <div class="bphead">
+        <div class="cnum rv">II &nbsp;&middot;&nbsp; The Blueprint</div>
+        <h2 class="ctitle rv d1">Engineering the<br><em>Impossible</em></h2>
+        <p class="cbody rv d2">Utzon&rsquo;s poetic sketch demanded engineering that simply did not yet exist. Arup &amp; Partners spent years developing new structural mathematics &mdash; and in doing so, revolutionised computational architecture forever.</p>
+      </div>
+      <div class="bpgrid">
+        <div class="bpimg rv">
+          <img id="bpImg1" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Structural drawings">
+          <div class="bpcap">Structural drawings &nbsp;&middot;&nbsp; Stage I</div>
+        </div>
+        <div class="bpimg rv d1">
+          <img id="bpImg2" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Shell geometry">
+          <div class="bpcap">Shell geometry &nbsp;&middot;&nbsp; 1961</div>
+        </div>
+        <div class="bpimg rv d2">
+          <img id="bpImg3" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Computer analysis">
+          <div class="bpcap">Arup &amp; Partners &nbsp;&middot;&nbsp; Computer analysis</div>
+        </div>
+        <div class="bpimg rv d3">
+          <img id="bpImg4" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Precast ribs">
+          <div class="bpcap">Precast ribbed panels &nbsp;&middot;&nbsp; 2,194 sections</div>
         </div>
       </div>
     </section>
@@ -2894,9 +2963,13 @@
         var scrolled = -rect.top;
         var p = Math.max(0, Math.min(1, scrolled / totalH));
 
-        if (ready && video.duration && Math.abs(p - lastP) > 0.0001) {
-          lastP = p;
-          video.currentTime = p * video.duration;
+        // Video plays over first 77% of the scroll range,
+        // then holds at the final frame for the remaining 23% (≈150vh pause).
+        var videoP = Math.min(1, p / 0.77);
+
+        if (ready && video.duration && Math.abs(videoP - lastP) > 0.0001) {
+          lastP = videoP;
+          video.currentTime = videoP * video.duration;
         }
 
         // Overlay: slight vignette, stays on throughout
@@ -2928,7 +3001,7 @@
     }
 
     /* Chapter nav dots — click to scroll, observer to highlight */
-    var navIds = ["hero","timeline","sketch","sphere-driver","scroller","construction","video-driver","completion","epilogue"];
+    var navIds = ["hero","timeline","sketch","blueprint","sphere-driver","scroller","construction","video-driver","completion","epilogue"];
     var dots = document.querySelectorAll(".ndot");
 
     dots.forEach(function (d) {
@@ -2974,7 +3047,7 @@
         var y = window.scrollY;
         if (y < window.innerHeight * 1.5) {
           heroBg.style.transform = "scale(1.08) translateY(" + (y * 0.18) + "px)";
-          heroBg.style.opacity   = String(Math.max(0, 0.38 - (y / window.innerHeight) * 0.25));
+          heroBg.style.opacity   = String(Math.max(0, 0.22 - (y / window.innerHeight) * 0.18));
         }
       }, { passive: true });
     }
