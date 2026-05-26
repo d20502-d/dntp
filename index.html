@@ -319,119 +319,81 @@
       }
 
 
-      /* ════ FINAL 3D SECTION ════════════════════════════ */
-      #final-section {
-        height: 100vh;
+      /* ════ SCROLL-DRIVEN VIDEO SECTION ══════════════════ */
+      #video-driver {
+        height: 500vh;
         position: relative;
+        background: #090b0f;
+      }
+      #video-stage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
         overflow: hidden;
         background: #090b0f;
         opacity: 0;
-        transition: opacity 2s ease;
+        transition: opacity 1.8s ease;
       }
-      #final-section.revealed { opacity: 1; }
-
-      /* iframe — pointer-events:none prevents scroll trap until activated */
-      #final-iframe {
+      #video-stage.revealed { opacity: 1; }
+      #scroll-video {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        border: none;
-        pointer-events: none;
+        object-fit: cover;
+        display: block;
       }
-      #final-iframe.sf-active { pointer-events: auto; }
-
-      /* Click-to-activate overlay */
-      #sf-activate {
+      /* Dark gradient overlay fades as video plays */
+      #video-overlay {
         position: absolute;
         inset: 0;
-        z-index: 10;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background: linear-gradient(180deg,
-          rgba(9,11,15,0.88) 0%,
-          rgba(9,11,15,0.25) 55%,
-          rgba(9,11,15,0.72) 100%);
-        transition: opacity 0.6s ease;
-      }
-      #sf-activate.hidden { opacity: 0; pointer-events: none; }
-
-      #sf-top {
-        padding: 3.5rem 4rem 0;
+        z-index: 5;
         pointer-events: none;
+        background: linear-gradient(
+          180deg,
+          rgba(9,11,15,0.82) 0%,
+          rgba(9,11,15,0.15) 45%,
+          rgba(9,11,15,0.55) 100%
+        );
+        transition: opacity 0.4s ease;
       }
-      #sf-enter {
-        padding: 2.5rem;
+      /* Top-left caption */
+      #video-caption {
+        position: absolute;
+        top: 3.5rem;
+        left: 4rem;
+        z-index: 10;
+        pointer-events: none;
+        transition: opacity 0.8s ease;
+      }
+      /* Scroll hint at bottom */
+      #video-scroll-hint {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        pointer-events: none;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 0.8rem;
-      }
-      #sf-enter-ring {
-        width: 4rem;
-        height: 4rem;
-        border: 1.5px solid rgba(210,165,75,0.55);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        animation: sf-pulse 2.2s ease-in-out infinite;
-        transition: border-color 0.3s;
-      }
-      #sf-activate:hover #sf-enter-ring { border-color: rgba(210,165,75,0.9); }
-      @keyframes sf-pulse {
-        0%, 100% { box-shadow: 0 0 0 0 rgba(210,165,75,0.3); }
-        50%       { box-shadow: 0 0 0 14px rgba(210,165,75,0); }
-      }
-      #sf-enter-ring svg {
-        width: 1.5rem;
-        height: 1.5rem;
-        stroke: rgba(210,165,75,0.85);
-        fill: none;
-        stroke-width: 1.5;
-      }
-      #sf-enter-label {
-        font-family: "Space Mono", monospace;
-        font-size: 0.6rem;
-        letter-spacing: 0.45em;
-        color: rgba(210,165,75,0.88);
-        text-transform: uppercase;
-      }
-      #sf-enter-sub {
-        font-family: "Space Mono", monospace;
-        font-size: 0.5rem;
-        letter-spacing: 0.2em;
-        color: rgba(242,235,220,0.32);
-        text-transform: uppercase;
-      }
-
-      /* EXIT button — top-right, shown when iframe is active */
-      #sf-exit {
-        position: absolute;
-        top: 1.5rem;
-        right: 1.5rem;
-        z-index: 20;
-        background: rgba(9,11,15,0.88);
-        border: 1px solid rgba(210,165,75,0.35);
-        color: rgba(210,165,75,0.8);
-        font-family: "Space Mono", monospace;
-        font-size: 0.52rem;
-        letter-spacing: 0.32em;
-        text-transform: uppercase;
-        padding: 0.6rem 1.1rem;
-        cursor: pointer;
-        display: flex;
         align-items: center;
         gap: 0.5rem;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s, border-color 0.2s, color 0.2s;
+        opacity: 1;
+        transition: opacity 0.5s ease;
       }
-      #sf-exit.visible { opacity: 1; pointer-events: auto; }
-      #sf-exit:hover { border-color: rgba(210,165,75,0.75); color: rgba(210,165,75,1); }
-      #sf-exit svg { flex-shrink: 0; }
+      #video-scroll-hint span {
+        font-family: "Space Mono", monospace;
+        font-size: 0.5rem;
+        letter-spacing: 0.35em;
+        color: rgba(210,165,75,0.55);
+        text-transform: uppercase;
+      }
+      #video-scroll-arrow {
+        width: 1px;
+        height: 28px;
+        background: linear-gradient(to bottom, rgba(210,165,75,0.6), transparent);
+        animation: arrowPulse 1.8s ease-in-out infinite;
+      }
 
             /* ════ SPHERE INTRO ════════════════════════════════ */
       #sphere-driver {
@@ -2099,24 +2061,26 @@
       })();
     </script>
 
-    <!-- ════ FINAL 3D SECTION ════ -->
+    <!-- ════ SCROLL-DRIVEN VIDEO SECTION ════ -->
     <div id="photo-section">
-      <div id="final-section">
+      <div id="video-driver">
+        <div id="video-stage">
 
-        <!-- 3D iframe — pointer-events:none prevents scroll trap until user activates -->
-        <iframe
-          id="final-iframe"
-          title="Sydney Opera House — Interactive 3D"
-          src="https://sketchfab.com/models/73267b70f8fd46a8a175bd51f1c77b1c/embed?autostart=1&preload=1&ui_controls=1&ui_infos=0&ui_inspector=0&ui_stop=0&ui_watermark=0&ui_watermark_link=0&ui_ar=0&ui_help=0&ui_settings=0&ui_vr=0&ui_fullscreen=1&ui_annotations=0&camera=0&dnt=1"
-          allow="autoplay; fullscreen; xr-spatial-tracking"
-          allowfullscreen
-          mozallowfullscreen="true"
-          webkitallowfullscreen="true">
-        </iframe>
+          <!-- Video: currentTime driven by scroll, never auto-plays -->
+          <video
+            id="scroll-video"
+            src="soh-legacy.mp4"
+            preload="auto"
+            playsinline
+            muted
+            disablePictureInPicture>
+          </video>
 
-        <!-- Activation overlay — clicking anywhere enters 3D mode -->
-        <div id="sf-activate">
-          <div id="sf-top">
+          <!-- Dark gradient overlay (fades as video progresses) -->
+          <div id="video-overlay"></div>
+
+          <!-- Caption overlay -->
+          <div id="video-caption">
             <div class="fin-num">VII &nbsp;·&nbsp; Legacy</div>
             <p class="fin-quote">
               It is not possible to talk about the<br>
@@ -2125,25 +2089,14 @@
             </p>
             <p class="fin-attr">&mdash;&nbsp;Jørn Utzon &nbsp;·&nbsp; Pritzker Prize, 2003</p>
           </div>
-          <div id="sf-enter">
-            <div id="sf-enter-ring">
-              <svg viewBox="0 0 24 24">
-                <path d="M5 12h14M14 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <span id="sf-enter-label">EXPLORE IN 3D</span>
-            <span id="sf-enter-sub">Click to interact &nbsp;·&nbsp; drag to orbit &nbsp;·&nbsp; scroll to zoom</span>
+
+          <!-- Scroll hint -->
+          <div id="video-scroll-hint">
+            <span>Scroll to reveal</span>
+            <div id="video-scroll-arrow"></div>
           </div>
+
         </div>
-
-        <!-- EXIT button shown only while 3D is active -->
-        <button id="sf-exit" aria-label="Exit 3D view">
-          <svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2.2">
-            <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/>
-          </svg>
-          EXIT &nbsp;/&nbsp; ESC
-        </button>
-
       </div>
     </div>
     <!-- /photo-section -->
@@ -2442,43 +2395,60 @@
   <script>
     (function () {
       "use strict";
-      var finalSection = document.getElementById("final-section");
-      if (!finalSection) return;
 
-      // Fade in when section enters viewport
+      var driver  = document.getElementById("video-driver");
+      var stage   = document.getElementById("video-stage");
+      var video   = document.getElementById("scroll-video");
+      var overlay = document.getElementById("video-overlay");
+      var caption = document.getElementById("video-caption");
+      var hint    = document.getElementById("video-scroll-hint");
+      if (!driver || !video) return;
+
+      // Reveal stage when it enters the viewport
       var revObs = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) finalSection.classList.add("revealed");
+        if (entries[0].isIntersecting) stage.classList.add("revealed");
       }, { threshold: 0.05 });
-      revObs.observe(finalSection);
+      revObs.observe(driver);
 
-      var iframe  = document.getElementById("final-iframe");
-      var overlay = document.getElementById("sf-activate");
-      var exitBtn = document.getElementById("sf-exit");
+      // Keep video paused at all times — we control it via currentTime
+      function keepPaused() { if (!video.paused) video.pause(); }
+      video.addEventListener("play",        keepPaused);
+      video.addEventListener("timeupdate",  keepPaused);
 
-      function enter3D() {
-        if (!iframe) return;
-        iframe.classList.add("sf-active");
-        if (overlay) overlay.classList.add("hidden");
-        if (exitBtn) exitBtn.classList.add("visible");
+      var ready = false;
+      video.addEventListener("loadedmetadata", function () { ready = true; update(); });
+      video.addEventListener("canplaythrough", function () { ready = true; });
+
+      var lastP = -1;
+      function update() {
+        var rect   = driver.getBoundingClientRect();
+        var totalH = driver.offsetHeight - window.innerHeight;
+        var scrolled = -rect.top;
+        var p = Math.max(0, Math.min(1, scrolled / totalH));
+
+        if (ready && video.duration && Math.abs(p - lastP) > 0.0001) {
+          lastP = p;
+          video.currentTime = p * video.duration;
+        }
+
+        // Overlay: visible at start, fades after 10% scroll
+        if (overlay) {
+          var overlayOp = p < 0.1 ? 1 : Math.max(0, 1 - (p - 0.1) / 0.12);
+          overlay.style.opacity = overlayOp.toFixed(3);
+        }
+        // Caption: visible first 20%, then fades
+        if (caption) {
+          var capOp = p < 0.08 ? 1 : Math.max(0, 1 - (p - 0.08) / 0.12);
+          caption.style.opacity = capOp.toFixed(3);
+        }
+        // Scroll hint: visible first 5%, then fades
+        if (hint) {
+          hint.style.opacity = p < 0.02 ? "1" : Math.max(0, 1 - (p - 0.02) / 0.04).toFixed(3);
+        }
       }
 
-      function exit3D() {
-        if (!iframe) return;
-        iframe.classList.remove("sf-active");
-        if (overlay) overlay.classList.remove("hidden");
-        if (exitBtn) exitBtn.classList.remove("visible");
-      }
-
-      if (overlay) overlay.addEventListener("click", enter3D);
-      if (exitBtn) exitBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        exit3D();
-      });
-
-      // ESC key exits 3D mode from anywhere
-      document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape") exit3D();
-      });
+      window.addEventListener("scroll", update, { passive: true });
+      update();
     })();
   </script>
   </body>
