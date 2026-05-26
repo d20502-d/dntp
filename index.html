@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sydney Opera House — Construction</title>
+    <title>Sydney Opera House — A Monument in Shells</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -18,6 +18,7 @@
         --bpline: #5a9fd4;
         --concrete: #d6d0c6;
         --tile: #f5f2eb;
+        --coal: #2d2520;
       }
       * {
         margin: 0;
@@ -31,6 +32,7 @@
         background: var(--ink);
         font-family: "Playfair Display", serif;
         overflow-x: hidden;
+        color: var(--cream);
       }
 
       /* ── SCROLL DRIVER ────────────────────────────────── */
@@ -343,19 +345,18 @@
         object-fit: cover;
         display: block;
       }
-      /* Dark gradient overlay fades as video plays */
+      /* Dark gradient overlay — keeps tiles text readable over video */
       #video-overlay {
         position: absolute;
         inset: 0;
         z-index: 5;
         pointer-events: none;
         background: linear-gradient(
-          180deg,
-          rgba(9,11,15,0.82) 0%,
-          rgba(9,11,15,0.15) 45%,
-          rgba(9,11,15,0.55) 100%
+          135deg,
+          rgba(9,11,15,0.72) 0%,
+          rgba(9,11,15,0.40) 50%,
+          rgba(9,11,15,0.62) 100%
         );
-        transition: opacity 0.4s ease;
       }
       /* Top-left caption */
       #video-caption {
@@ -545,11 +546,423 @@
         transition: opacity 0.1s;
       }
 
+      /* ════════════════════════════════════════════════════
+         B-FILE STYLES — hero, timeline, sketch, tiles, completion
+         ════════════════════════════════════════════════════ */
+
+      /* Top progress bar */
+      #progress {
+        position: fixed; top: 0; left: 0;
+        height: 2px; background: var(--rust);
+        z-index: 1000; width: 0;
+        transition: width .1s linear;
+      }
+
+      /* Chapter nav dots */
+      #chapnav {
+        position: fixed; right: 1.5rem; top: 50%;
+        transform: translateY(-50%);
+        z-index: 100; display: flex;
+        flex-direction: column; gap: .8rem;
+      }
+      .ndot {
+        width: 7px; height: 7px;
+        border: 1px solid rgba(242,235,220,.35);
+        border-radius: 50%; cursor: pointer;
+        transition: all .3s;
+      }
+      .ndot.on { background: var(--rust); border-color: var(--rust); transform: scale(1.5); }
+      .ndot:hover { border-color: var(--cream); }
+
+      /* Film-grain overlay */
+      .grain {
+        position: absolute; inset: 0;
+        pointer-events: none; opacity: .45;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+      }
+
+      /* Reveal animation */
+      .rv { opacity: 0; transform: translateY(35px); transition: opacity .85s ease, transform .85s ease; }
+      .rv.on { opacity: 1; transform: none; }
+      .d1 { transition-delay: .15s; }
+      .d2 { transition-delay: .3s; }
+      .d3 { transition-delay: .45s; }
+
+      /* Content typography */
+      .cnum {
+        font-family: 'Space Mono', monospace;
+        font-size: .6rem; letter-spacing: .35em;
+        color: var(--rust); text-transform: uppercase;
+        margin-bottom: 1.2rem; display: flex;
+        align-items: center; gap: .8rem;
+      }
+      .cnum::before { content: ''; display: block; width: 32px; height: 1px; background: var(--rust); }
+      .ctitle {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.8rem, 3.5vw, 3.2rem);
+        font-weight: 400; line-height: 1.15;
+        margin-bottom: 1.5rem; color: var(--cream);
+      }
+      .ctitle em { font-style: italic; color: var(--gold); }
+      .cbody {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.15rem; line-height: 1.8;
+        font-weight: 300; color: rgba(242,235,220,.72);
+        margin-bottom: 1.4rem;
+      }
+      .fbox {
+        border-left: 2px solid var(--rust);
+        padding: .8rem 1.2rem; margin: 1.5rem 0;
+        background: rgba(176,64,21,.05);
+      }
+      .flabel {
+        font-family: 'Space Mono', monospace;
+        font-size: .55rem; letter-spacing: .3em;
+        color: var(--rust); text-transform: uppercase;
+        margin-bottom: .3rem;
+      }
+      .fval {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.7rem; font-style: italic;
+        color: var(--gold);
+      }
+      .fdesc {
+        font-size: .78rem; font-family: 'Space Mono', monospace;
+        color: rgba(242,235,220,.45); margin-top: .2rem;
+      }
+
+      /* ── HERO ────────────────────────────────────────── */
+      #hero {
+        height: 100vh; position: relative;
+        display: flex; align-items: center;
+        justify-content: center; overflow: hidden;
+      }
+      #heroBg {
+        position: absolute; inset: 0;
+        background-size: cover; background-position: center;
+        opacity: .38; transform: scale(1.08);
+      }
+      #hc { position: relative; z-index: 3; text-align: center; padding: 2rem; }
+      .hl {
+        font-family: 'Space Mono', monospace;
+        font-size: .65rem; letter-spacing: .4em;
+        color: var(--rust); text-transform: uppercase;
+        opacity: 0; animation: fu 1s .4s forwards;
+      }
+      h1.ht {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(3.2rem, 8vw, 7rem);
+        font-weight: 400; line-height: 1;
+        letter-spacing: -.02em; margin: .8rem 0 1rem;
+        opacity: 0; animation: fu 1.2s .7s forwards;
+      }
+      h1.ht em { font-style: italic; color: var(--gold); }
+      .hsub {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(1rem, 2vw, 1.4rem);
+        font-style: italic; font-weight: 300;
+        color: rgba(242,235,220,.55); letter-spacing: .05em;
+        opacity: 0; animation: fu 1s 1s forwards;
+      }
+      .scrl {
+        position: absolute; bottom: 2.5rem;
+        left: 50%; transform: translateX(-50%);
+        z-index: 3; display: flex;
+        flex-direction: column; align-items: center;
+        gap: .4rem; opacity: 0;
+        animation: fi 1s 1.8s forwards;
+      }
+      .scrl span {
+        font-family: 'Space Mono', monospace;
+        font-size: .55rem; letter-spacing: .3em;
+        color: rgba(242,235,220,.4); text-transform: uppercase;
+      }
+      .scrl-line {
+        width: 1px; height: 50px;
+        background: linear-gradient(transparent, var(--rust));
+        animation: b-pulse 2s infinite;
+      }
+
+      @keyframes fu { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+      @keyframes fi { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes b-pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+
+      /* ── TIMELINE ────────────────────────────────────── */
+      #timeline { background: var(--coal); padding: 7rem 4rem; }
+      .tlinner { max-width: 1100px; margin: 0 auto; }
+      .tlhead { text-align: center; margin-bottom: 4rem; }
+      .tlhead .cnum { justify-content: center; }
+      .tlhead .cnum::before { display: none; }
+      .tltrack {
+        display: flex; position: relative; padding: 3rem 0;
+      }
+      .tltrack::before {
+        content: ''; position: absolute;
+        left: 0; right: 0; top: 50%; height: 1px;
+        background: linear-gradient(to right, transparent, var(--rust), transparent);
+      }
+      .tlnode {
+        flex: 1; display: flex; flex-direction: column;
+        align-items: center; text-align: center; padding: 0 .5rem;
+      }
+      .tlnode:nth-child(odd) { padding-bottom: 6rem; }
+      .tlnode:nth-child(even) { padding-top: 6rem; flex-direction: column-reverse; }
+      .tldot {
+        width: 8px; height: 8px; background: var(--rust);
+        border-radius: 50%; border: 2px solid var(--coal);
+        z-index: 2; flex-shrink: 0;
+      }
+      .tlyear {
+        font-family: 'Space Mono', monospace;
+        font-size: .65rem; color: var(--rust);
+        letter-spacing: .1em; margin: .4rem 0;
+      }
+      .tllbl {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: .95rem; color: rgba(242,235,220,.58); line-height: 1.4;
+      }
+
+      /* ── SKETCH ──────────────────────────────────────── */
+      #sketch {
+        background: var(--coal);
+        display: grid; grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+      }
+      #sketchImg { height: 100vh; position: sticky; top: 0; overflow: hidden; }
+      #sketchImg img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); }
+      .stxt { padding: 7rem 4rem 7rem 5rem; }
+
+      /* ── CONSTRUCTION b6 ─────────────────────────────── */
+      #construction {
+        background: var(--coal);
+        display: grid; grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+      }
+      #conImg { overflow: hidden; }
+      #conImg img {
+        width: 100%; height: 100%; object-fit: cover;
+        filter: grayscale(.15) contrast(1.1);
+      }
+      .contxt { padding: 7rem 5rem; }
+
+      /* ── TILES OVERLAY ON VIDEO ──────────────────────── */
+      .tilepat {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(
+          45deg, transparent, transparent 8px,
+          rgba(184,149,42,.03) 8px, rgba(184,149,42,.03) 9px
+        );
+        z-index: 3; pointer-events: none;
+      }
+      #video-tilecontent {
+        position: absolute; inset: 0;
+        z-index: 10; display: flex;
+        align-items: center; justify-content: center;
+        pointer-events: none;
+      }
+      .tilecontent {
+        max-width: 1100px; width: 100%;
+        padding: 4rem;
+        display: grid; grid-template-columns: 1fr 2fr;
+        gap: 5rem; align-items: center;
+      }
+      .tilestat { text-align: center; }
+      .tilenum {
+        font-family: 'Playfair Display', serif;
+        font-style: italic; color: var(--gold);
+        line-height: 1; display: block;
+      }
+      .tileunit {
+        font-family: 'Space Mono', monospace;
+        font-size: .6rem; letter-spacing: .35em;
+        color: var(--rust); text-transform: uppercase;
+        margin-top: .4rem;
+      }
+      .tilehr {
+        width: 1px; height: 80px;
+        background: linear-gradient(transparent, rgba(184,149,42,.5), transparent);
+        margin: 1.2rem auto;
+      }
+
+      /* ── COMPLETION ──────────────────────────────────── */
+      #completion {
+        min-height: 100vh; position: relative;
+        display: flex; align-items: center;
+      }
+      #compBg { position: absolute; inset: 0; }
+      #compBg img { width: 100%; height: 100%; object-fit: cover; }
+      .compov {
+        position: absolute; inset: 0;
+        background: linear-gradient(105deg, rgba(11,12,14,.88) 38%, rgba(11,12,14,.25) 100%);
+      }
+      .compcontent {
+        position: relative; z-index: 2;
+        max-width: 580px; padding: 4rem 7rem;
+      }
+      .quote {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+        font-style: italic; line-height: 1.5;
+        margin-bottom: 1.5rem; position: relative;
+        padding-left: 1.5rem; color: var(--cream);
+      }
+      .quote::before {
+        content: '\201C';
+        font-size: 7rem; color: var(--gold); opacity: .25;
+        position: absolute; top: -2.5rem; left: -1rem;
+        font-family: 'Playfair Display', serif; line-height: 1;
+      }
+      .qattr {
+        font-family: 'Space Mono', monospace;
+        font-size: .6rem; letter-spacing: .28em;
+        color: rgba(242,235,220,.45); text-transform: uppercase;
+      }
+
+      /* ── EPILOGUE ────────────────────────────────────── */
+      #epilogue {
+        background: #000;
+        min-height: 100vh;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        padding: 4rem;
+        text-align: center;
+      }
+      #epilogue .epq {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.3rem, 3vw, 2.2rem);
+        font-style: italic; font-weight: 400;
+        color: rgba(242,235,220,.78);
+        line-height: 1.6; max-width: 720px;
+        letter-spacing: .015em;
+        position: relative; padding: 0 2rem;
+      }
+      #epilogue .epq::before {
+        content: '\201C';
+        font-size: 9rem;
+        color: rgba(184,149,42,.12);
+        position: absolute; top: -3.5rem; left: -1.5rem;
+        font-family: 'Playfair Display', serif; line-height: 1;
+      }
+      #epilogue .epattr {
+        font-family: 'Space Mono', monospace;
+        font-size: .55rem; letter-spacing: .45em;
+        color: rgba(242,235,220,.22);
+        text-transform: uppercase;
+        margin-top: 2.5rem; display: block;
+      }
+
+      /* ── RESPONSIVE ──────────────────────────────────── */
+      @media (max-width: 850px) {
+        #sketch, #construction { grid-template-columns: 1fr; }
+        #sketchImg { height: 45vh; position: relative; }
+        .stxt, .contxt { padding: 3rem 1.5rem; }
+        .tilecontent { grid-template-columns: 1fr; gap: 2rem; }
+        .compcontent { padding: 3rem 1.5rem; }
+        .tltrack { flex-wrap: wrap; }
+        .tlnode:nth-child(odd), .tlnode:nth-child(even) { padding-bottom: 2rem; padding-top: 0; flex-direction: column; }
+      }
 
     </style>
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
   </head>
   <body>
+    <!-- ════ TOP PROGRESS BAR ════ -->
+    <div id="progress"></div>
+
+    <!-- ════ CHAPTER NAV DOTS ════ -->
+    <nav id="chapnav">
+      <div class="ndot on"  data-t="hero"></div>
+      <div class="ndot"     data-t="timeline"></div>
+      <div class="ndot"     data-t="sketch"></div>
+      <div class="ndot"     data-t="sphere-driver"></div>
+      <div class="ndot"     data-t="scroller"></div>
+      <div class="ndot"     data-t="construction"></div>
+      <div class="ndot"     data-t="video-driver"></div>
+      <div class="ndot"     data-t="completion"></div>
+      <div class="ndot"     data-t="epilogue"></div>
+    </nav>
+
+    <!-- ════ b1 · HERO ════ -->
+    <section id="hero">
+      <div id="heroBg" style="background-image:url('https://images.unsplash.com/photo-1524293763555-51a5e55f7e76?w=1920&q=80&auto=format&fit=crop')"></div>
+      <div class="grain"></div>
+      <div id="hc">
+        <div class="hl">Sydney Opera House &nbsp;&middot;&nbsp; 1957&ndash;1973</div>
+        <h1 class="ht">A Monument<br>in <em>Shells</em></h1>
+        <p class="hsub">The impossible architecture that changed the world</p>
+      </div>
+      <div class="scrl"><span>Scroll</span><div class="scrl-line"></div></div>
+    </section>
+
+    <!-- ════ b5 · TIMELINE ════ -->
+    <section id="timeline">
+      <div class="tlinner">
+        <div class="tlhead">
+          <div class="cnum rv">Chronology</div>
+          <h2 class="ctitle rv d1">Sixteen Years,<br>Three <em>Phases</em></h2>
+        </div>
+        <div class="tltrack">
+          <div class="tlnode rv">
+            <div class="tlyear">1957</div><div class="tldot"></div>
+            <div class="tllbl">Utzon wins<br>competition</div>
+          </div>
+          <div class="tlnode rv d1">
+            <div class="tlyear">1959</div><div class="tldot"></div>
+            <div class="tllbl">Stage I:<br>Podium begins</div>
+          </div>
+          <div class="tlnode rv d2">
+            <div class="tlyear">1963</div><div class="tldot"></div>
+            <div class="tllbl">Stage II:<br>Roof shells</div>
+          </div>
+          <div class="tlnode rv d3">
+            <div class="tlyear">1966</div><div class="tldot"></div>
+            <div class="tllbl">Utzon<br>resigns</div>
+          </div>
+          <div class="tlnode rv">
+            <div class="tlyear">1967</div><div class="tldot"></div>
+            <div class="tllbl">Stage III:<br>Interiors</div>
+          </div>
+          <div class="tlnode rv d1">
+            <div class="tlyear">1973</div><div class="tldot"></div>
+            <div class="tllbl">Opening by<br>Queen Elizabeth II</div>
+          </div>
+          <div class="tlnode rv d2">
+            <div class="tlyear">2003</div><div class="tldot"></div>
+            <div class="tllbl">Pritzker<br>Prize</div>
+          </div>
+          <div class="tlnode rv d3">
+            <div class="tlyear">2007</div><div class="tldot"></div>
+            <div class="tllbl">UNESCO World<br>Heritage</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ b2 · SKETCH ════ -->
+    <section id="sketch">
+      <div id="sketchImg">
+        <img id="skImg"
+          src="https://images.unsplash.com/photo-1568952433726-3896e3881c65?w=900&q=80&auto=format&fit=crop"
+          alt="Architectural sketches">
+      </div>
+      <div class="stxt">
+        <div class="cnum rv">I &nbsp;&middot;&nbsp; The Sketch</div>
+        <h2 class="ctitle rv d1">A Dream Drawn<br>in <em>Pencil</em></h2>
+        <p class="cbody rv d2">In January 1957, a Danish architect named Jørn Utzon submitted entry number 218 to an international competition for a new national opera house in Sydney. His drawings were barely finished &mdash; gestural, lyrical, more dream than blueprint.</p>
+        <p class="cbody rv d3">Eero Saarinen arrived late to the jury deliberations. He retrieved entry 218 from the rejected pile and declared it a work of genius. The shells, he said, would become one of the greatest buildings of the twentieth century.</p>
+        <div class="fbox rv">
+          <div class="flabel">Competition Entries</div>
+          <div class="fval">233</div>
+          <div class="fdesc">from 32 countries &nbsp;&middot;&nbsp; Utzon&rsquo;s was #218</div>
+        </div>
+        <div class="fbox rv d1">
+          <div class="flabel">Prize Awarded</div>
+          <div class="fval">&pound;5,000</div>
+          <div class="fdesc">Australian pounds &nbsp;&middot;&nbsp; January 1957</div>
+        </div>
+      </div>
+    </section>
+
     <!-- ════ SPHERE INTRO (Three.js) ════ -->
     <div id="sphere-driver">
       <div id="sphere-stage">
@@ -1752,6 +2165,24 @@
     </div>
     <!-- /scroller -->
 
+    <!-- ════ b6 · CONSTRUCTION COST ════ -->
+    <section id="construction">
+      <div id="conImg">
+        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80&auto=format&fit=crop" alt="Construction site">
+      </div>
+      <div class="contxt">
+        <div class="cnum rv">V &nbsp;&middot;&nbsp; The Build</div>
+        <h2 class="ctitle rv d1">$102 Million<br>Over <em>Budget</em></h2>
+        <p class="cbody rv d2">The original estimate was &pound;3.5 million, to be completed in 1963. The final cost was A$102 million, delivered a decade late. The project nearly destroyed the careers of everyone involved &mdash; and produced one of humanity&rsquo;s greatest buildings.</p>
+        <p class="cbody rv d3">Jørn Utzon resigned in 1966 after a bitter dispute with the new government over fees and design control. He never returned to Australia. He never saw his building completed. In 2003, he received the Pritzker Prize &mdash; architecture&rsquo;s highest honour.</p>
+        <div class="fbox rv">
+          <div class="flabel">Original Budget</div>
+          <div class="fval">&pound;3.5M</div>
+          <div class="fdesc">Final cost: A$102 million &nbsp;&middot;&nbsp; Overrun 1,457%</div>
+        </div>
+      </div>
+    </section>
+
     <script>
       (function () {
         "use strict";
@@ -1860,8 +2291,9 @@
         var yr = document.getElementById("yr");
 
         function update() {
-          var scrollH = scroller.scrollHeight - window.innerHeight;
-          var p = cl(window.scrollY / scrollH);
+          var driverTop = scroller.getBoundingClientRect().top;
+          var driverH   = scroller.offsetHeight - window.innerHeight;
+          var p = cl(-driverTop / driverH);
 
           // Progress bar
           pfill.style.width = p * 100 + "%";
@@ -2055,8 +2487,9 @@
           .addEventListener("click", function (e) {
             var rect = this.getBoundingClientRect();
             var ratio = cl((e.clientX - rect.left) / rect.width);
-            var scrollH = scroller.scrollHeight - window.innerHeight;
-            window.scrollTo({ top: ratio * scrollH, behavior: "auto" });
+            var driverH   = scroller.offsetHeight - window.innerHeight;
+            var scrollerTop = scroller.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: scrollerTop + ratio * driverH, behavior: "auto" });
           });
       })();
     </script>
@@ -2076,18 +2509,32 @@
             disablePictureInPicture>
           </video>
 
-          <!-- Dark gradient overlay (fades as video progresses) -->
+          <!-- Dark gradient overlay -->
           <div id="video-overlay"></div>
 
-          <!-- Caption overlay -->
-          <div id="video-caption">
-            <div class="fin-num">VII &nbsp;·&nbsp; Legacy</div>
-            <p class="fin-quote">
-              It is not possible to talk about the<br>
-              Sydney Opera House. It is only<br>
-              possible to talk about what it means.
-            </p>
-            <p class="fin-attr">&mdash;&nbsp;Jørn Utzon &nbsp;·&nbsp; Pritzker Prize, 2003</p>
+          <!-- Subtle diagonal tile pattern -->
+          <div class="tilepat"></div>
+
+          <!-- b7 · THE SKIN — stats + text overlaid on video -->
+          <div id="video-tilecontent">
+            <div class="tilecontent">
+              <div class="tilestat">
+                <span class="tilenum rv" style="font-size:clamp(2.8rem,5.5vw,5.5rem)">1,056,006</span>
+                <div class="tileunit rv d1">Ceramic tiles</div>
+                <div class="tilehr"></div>
+                <span class="tilenum rv d2" style="font-size:clamp(2.2rem,4.5vw,4.5rem)">67m</span>
+                <div class="tileunit rv d3">Height at peak</div>
+                <div class="tilehr"></div>
+                <span class="tilenum rv" style="font-size:clamp(1.8rem,3.5vw,3.5rem)">75.2m</span>
+                <div class="tileunit rv d1">Sphere radius</div>
+              </div>
+              <div>
+                <div class="cnum rv">VI &nbsp;&middot;&nbsp; The Skin</div>
+                <h2 class="ctitle rv d1">Self-Cleaning,<br>Forever <em>White</em></h2>
+                <p class="cbody rv d2">The roof tiles were designed to clean themselves in Sydney&rsquo;s rain. Glazed in two finishes &mdash; matte buff and gloss white &mdash; they create the shimmering chevron pattern that defines the building&rsquo;s silhouette from every angle.</p>
+                <p class="cbody rv d3">Manufactured by H&ouml;gan&auml;s of Sweden, each tile was inspected individually before installation. Arranged so the chevron pattern appears continuous from any viewing angle &mdash; a mathematical tour de force in itself.</p>
+              </div>
+            </div>
           </div>
 
           <!-- Scroll hint -->
@@ -2100,6 +2547,30 @@
       </div>
     </div>
     <!-- /photo-section -->
+
+    <!-- ════ b8 · COMPLETION ════ -->
+    <section id="completion">
+      <div id="compBg">
+        <img src="https://images.unsplash.com/photo-1624138784614-87fd1b6528f8?w=1920&q=80&auto=format&fit=crop" alt="Sydney Opera House">
+      </div>
+      <div class="compov"></div>
+      <div class="compcontent">
+        <div class="cnum rv">VII &nbsp;&middot;&nbsp; Completion</div>
+        <blockquote class="quote rv d1">It is not possible to talk about the Sydney Opera House. It is only possible to talk about what it means.</blockquote>
+        <p class="qattr rv d2">&mdash; Jørn Utzon &nbsp;&middot;&nbsp; Pritzker Prize Citation, 2003</p>
+        <div class="fbox rv d3" style="margin-top:2.5rem;border-color:var(--gold);">
+          <div class="flabel">Opened</div>
+          <div class="fval" style="color:var(--gold)">20 Oct 1973</div>
+          <div class="fdesc">By Queen Elizabeth II &nbsp;&middot;&nbsp; Beethoven&rsquo;s Ninth Symphony</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ EPILOGUE ════ -->
+    <section id="epilogue">
+      <p class="epq rv">I can say without hesitation that this building has changed the image of an entire country.</p>
+      <span class="epattr rv d1">&mdash;&nbsp;Jørn Utzon</span>
+    </section>
 
     <!-- ════ THREE.JS SPHERE INTRO ════ -->
     <script>
@@ -2346,7 +2817,6 @@
 
       var canvas = document.getElementById("mutation-canvas");
       var scroller = document.getElementById("scroller");
-      var sphereDriver = document.getElementById("sphere-driver");
       if (!canvas || !scroller) return;
 
       var ctx = canvas.getContext("2d");
@@ -2361,10 +2831,9 @@
       function cl(t) { return Math.max(0, Math.min(1, t)); }
 
       function draw() {
-        var sphereH = sphereDriver ? sphereDriver.offsetHeight : 0;
-        var relScroll = window.scrollY - sphereH;
-        var scrollH   = scroller.scrollHeight - window.innerHeight;
-        var p = cl(relScroll / scrollH);
+        var driverTop = scroller.getBoundingClientRect().top;
+        var driverH   = scroller.offsetHeight - window.innerHeight;
+        var p = cl(-driverTop / driverH);
 
         // Flash starts at 90%, peaks at 97%, then holds
         var flashP = cl((p - 0.90) / 0.10);
@@ -2400,7 +2869,6 @@
       var stage   = document.getElementById("video-stage");
       var video   = document.getElementById("scroll-video");
       var overlay = document.getElementById("video-overlay");
-      var caption = document.getElementById("video-caption");
       var hint    = document.getElementById("video-scroll-hint");
       if (!driver || !video) return;
 
@@ -2431,17 +2899,11 @@
           video.currentTime = p * video.duration;
         }
 
-        // Overlay: visible at start, fades after 10% scroll
+        // Overlay: slight vignette, stays on throughout
         if (overlay) {
-          var overlayOp = p < 0.1 ? 1 : Math.max(0, 1 - (p - 0.1) / 0.12);
-          overlay.style.opacity = overlayOp.toFixed(3);
+          overlay.style.opacity = "1";
         }
-        // Caption: visible first 20%, then fades
-        if (caption) {
-          var capOp = p < 0.08 ? 1 : Math.max(0, 1 - (p - 0.08) / 0.12);
-          caption.style.opacity = capOp.toFixed(3);
-        }
-        // Scroll hint: visible first 5%, then fades
+        // Scroll hint: visible first 3%, then fades
         if (hint) {
           hint.style.opacity = p < 0.02 ? "1" : Math.max(0, 1 - (p - 0.02) / 0.04).toFixed(3);
         }
@@ -2451,5 +2913,85 @@
       update();
     })();
   </script>
+  <script>
+  /* ════ NAV / REVEAL / PARALLAX (from B) ════ */
+  (function () {
+    "use strict";
+
+    /* Top progress bar */
+    var prog = document.getElementById("progress");
+    if (prog) {
+      window.addEventListener("scroll", function () {
+        var frac = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+        prog.style.width = Math.min(1, frac) * 100 + "%";
+      }, { passive: true });
+    }
+
+    /* Chapter nav dots — click to scroll, observer to highlight */
+    var navIds = ["hero","timeline","sketch","sphere-driver","scroller","construction","video-driver","completion","epilogue"];
+    var dots = document.querySelectorAll(".ndot");
+
+    dots.forEach(function (d) {
+      d.addEventListener("click", function () {
+        var el = document.getElementById(d.getAttribute("data-t"));
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    var so = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          var i = navIds.indexOf(e.target.id);
+          if (i >= 0) {
+            dots.forEach(function (d) { d.classList.remove("on"); });
+            if (dots[i]) dots[i].classList.add("on");
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    navIds.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) so.observe(el);
+    });
+
+    /* .rv reveal observer */
+    var ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add("on");
+          ro.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -20px 0px" });
+
+    document.querySelectorAll(".rv").forEach(function (el) { ro.observe(el); });
+
+    /* Hero parallax */
+    var heroBg = document.getElementById("heroBg");
+    if (heroBg) {
+      window.addEventListener("scroll", function () {
+        var y = window.scrollY;
+        if (y < window.innerHeight * 1.5) {
+          heroBg.style.transform = "scale(1.08) translateY(" + (y * 0.18) + "px)";
+          heroBg.style.opacity   = String(Math.max(0, 0.38 - (y / window.innerHeight) * 0.25));
+        }
+      }, { passive: true });
+    }
+
+    /* Sketch image parallax */
+    var skImg = document.getElementById("skImg");
+    if (skImg) {
+      window.addEventListener("scroll", function () {
+        var sketchEl = document.getElementById("sketch");
+        if (!sketchEl) return;
+        var rect = sketchEl.getBoundingClientRect();
+        var relY = -rect.top / window.innerHeight;
+        skImg.style.transform = "scale(1.06) translateY(" + (relY * 25) + "px)";
+      }, { passive: true });
+    }
+  })();
+  </script>
+
   </body>
 </html>
