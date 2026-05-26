@@ -320,32 +320,127 @@
 
 
       /* Final still section below */
+      /* ════ FINAL 3D SECTION ════════════════════════════ */
       #final-section {
-        min-height: 100vh;
+        height: 100vh;
         position: relative;
-        display: flex;
-        align-items: center;
         overflow: hidden;
+        background: #090b0f;
         opacity: 0;
-        transition: opacity 1.8s ease;
+        transition: opacity 2s ease;
       }
       #final-section.revealed {
         opacity: 1;
       }
-      #final-bg {
+      #final-iframe {
         position: absolute;
         inset: 0;
-      }
-      #final-bg img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        object-position: center 55%;
-        transform: scale(1.06);
-        transition: transform 8s ease;
+        border: none;
+        display: block;
       }
-      #final-section.revealed #final-bg img {
-        transform: scale(1.0);
+      /* Text overlay on top of the 3D model */
+      #final-overlay-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 5rem 3.5rem 3rem;
+        z-index: 10;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(9,11,15,0.75) 0%, rgba(9,11,15,0) 100%);
+        opacity: 1;
+        transition: opacity 1.5s ease 2s;
+      }
+      #final-section.revealed.interacted #final-overlay-text {
+        opacity: 0;
+      }
+      #final-num {
+        font-family: "Space Mono", monospace;
+        font-size: 0.6rem;
+        letter-spacing: 0.35em;
+        color: var(--rust);
+        text-transform: uppercase;
+        margin-bottom: 0.9rem;
+      }
+      #final-num::before {
+        content: "";
+        display: inline-block;
+        width: 2rem;
+        height: 1px;
+        background: var(--rust);
+        vertical-align: middle;
+        margin-right: 0.7rem;
+      }
+      #final-quote {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(1.1rem, 2.2vw, 1.7rem);
+        font-style: italic;
+        font-weight: 400;
+        color: rgba(242,235,220,0.9);
+        line-height: 1.55;
+        max-width: 36rem;
+        margin: 0 0 0.7rem 0;
+        text-shadow: 0 2px 16px rgba(0,0,0,0.7);
+      }
+      #final-attr {
+        font-family: "Space Mono", monospace;
+        font-size: 0.58rem;
+        letter-spacing: 0.25em;
+        color: rgba(242,235,220,0.45);
+        text-transform: uppercase;
+      }
+      /* Bottom drag hint */
+      #final-hint {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+      #final-section.revealed #final-hint {
+        opacity: 1;
+        transition-delay: 2s;
+      }
+      #final-section.revealed.interacted #final-hint {
+        opacity: 0;
+        transition-delay: 0s;
+      }
+      #final-hint-icon {
+        width: 2.2rem;
+        height: 2.2rem;
+        border: 1px solid rgba(210,165,75,0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: hint-pulse 2s ease-in-out infinite;
+      }
+      #final-hint-icon svg {
+        width: 1rem;
+        height: 1rem;
+        stroke: rgba(210,165,75,0.8);
+        fill: none;
+        stroke-width: 1.5;
+      }
+      #final-hint span {
+        font-family: "Space Mono", monospace;
+        font-size: 0.55rem;
+        letter-spacing: 0.35em;
+        color: rgba(210,165,75,0.6);
+        text-transform: uppercase;
+      }
+      @keyframes hint-pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(210,165,75,0.25); }
+        50% { box-shadow: 0 0 0 8px rgba(210,165,75,0); }
       }
       #final-overlay {
         position: absolute;
@@ -579,93 +674,7 @@
         transition: opacity 0.1s;
       }
 
-      /* ════ TIMELINE SLIDER ══════════════════════════════ */
-      #tl-wrap {
-        position: absolute;
-        bottom: 4rem;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 20;
-        text-align: center;
-        width: clamp(260px, 50vw, 520px);
-        opacity: 0;
-        transition: opacity 1.2s ease 0.5s;
-      }
-      #tl-wrap.show { opacity: 1; }
-      #tl-label {
-        font-family: "Space Mono", monospace;
-        font-size: 0.5rem;
-        letter-spacing: 0.38em;
-        color: rgba(242, 235, 220, 0.35);
-        text-transform: uppercase;
-        margin-bottom: 0.9rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-      }
-      #tl-label::before, #tl-label::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: rgba(255,255,255,0.08);
-      }
-      #tl-slider {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 100%;
-        height: 2px;
-        background: rgba(255,255,255,0.12);
-        border-radius: 1px;
-        outline: none;
-        cursor: pointer;
-      }
-      #tl-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: var(--rust);
-        cursor: pointer;
-        border: 2px solid rgba(255,255,255,0.2);
-        transition: transform 0.15s ease;
-      }
-      #tl-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
-      #tl-slider::-moz-range-thumb {
-        width: 18px; height: 18px;
-        border-radius: 50%;
-        background: var(--rust);
-        cursor: pointer;
-        border: 2px solid rgba(255,255,255,0.2);
-      }
-      #tl-ends {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 0.55rem;
-        font-family: "Space Mono", monospace;
-        font-size: 0.45rem;
-        letter-spacing: 0.28em;
-        color: rgba(242, 235, 220, 0.22);
-        text-transform: uppercase;
-      }
-      /* The SVG sketch overlay drawn on top of final photo via mix-blend */
-      #tl-sketch-overlay {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        z-index: 5;
-        opacity: 0;
-        transition: opacity 0.05s linear;
-        background: rgba(11,12,14,0.75);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      #tl-sketch-overlay svg {
-        width: 100%;
-        height: 100%;
-      }
+
     </style>
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
   </head>
@@ -2182,83 +2191,43 @@
     </script>
 
     <!-- ════ PHOTO REVEAL SECTION ════ -->
+    <!-- ════ FINAL 3D SECTION ════ -->
     <div id="photo-section">
-      <!-- Final still section with quote -->
       <div id="final-section">
-        <div id="final-bg">
-          <img
-            src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?fm=jpg&q=85&w=2400&auto=format&fit=crop"
-            alt="Sydney Opera House"
-            crossorigin="anonymous">
-        </div>
-        <div id="final-overlay"></div>
-        <div id="final-content">
-          <div class="fin-num">VII &nbsp;·&nbsp; Legacy</div>
-          <blockquote class="fin-quote">
-            It is not possible to talk about the Sydney Opera House. It is only
+
+        <!-- Sketchfab 3D interactive embed -->
+        <iframe
+          id="final-iframe"
+          title="Sydney Opera House — Interactive 3D Model"
+          src="https://sketchfab.com/models/73267b70f8fd46a8a175bd51f1c77b1c/embed?autostart=1&preload=1&ui_controls=1&ui_infos=0&ui_inspector=0&ui_stop=0&ui_watermark=0&ui_watermark_link=0&ui_ar=0&ui_help=0&ui_settings=0&ui_vr=0&ui_fullscreen=1&ui_annotations=0&camera=0"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          allowfullscreen
+          mozallowfullscreen="true"
+          webkitallowfullscreen="true">
+        </iframe>
+
+        <!-- Text overlay (fades out when user starts interacting) -->
+        <div id="final-overlay-text">
+          <div id="final-num">VII &nbsp;·&nbsp; Legacy</div>
+          <p id="final-quote">
+            It is not possible to talk about the<br>
+            Sydney Opera House. It is only<br>
             possible to talk about what it means.
-          </blockquote>
-          <p class="fin-attr">
-            &mdash; Jørn Utzon &nbsp;·&nbsp; Pritzker Prize, 2003
           </p>
-          <div class="fin-stats">
-            <div class="fin-stat">
-              <div class="slbl">Opened</div>
-              <div class="sval">20 Oct 1973</div>
-            </div>
-            <div class="fin-stat">
-              <div class="slbl">Budget overrun</div>
-              <div class="sval">1,457%</div>
-            </div>
-            <div class="fin-stat">
-              <div class="slbl">Annual visitors</div>
-              <div class="sval">~10.9M</div>
-            </div>
-            <div class="fin-stat">
-              <div class="slbl">UNESCO listed</div>
-              <div class="sval">2007</div>
-            </div>
-            <div class="fin-stat">
-              <div class="slbl">Pritzker Prize</div>
-              <div class="sval">2003</div>
-            </div>
-            <div class="fin-stat">
-              <div class="slbl">Tiles</div>
-              <div class="sval">1,056,006</div>
-            </div>
-          </div>
-
-          <!-- Timeline slider: sketch ↔ reality -->
-          <div id="tl-wrap">
-            <div id="tl-label">Sketch vs Reality</div>
-            <input type="range" id="tl-slider" min="0" max="100" value="0">
-            <div id="tl-ends">
-              <span>Line sketch · 1957</span>
-              <span>Completed · 1973</span>
-            </div>
-          </div>
+          <p id="final-attr">&mdash;&nbsp;Jørn Utzon &nbsp;·&nbsp; Pritzker Prize, 2003</p>
         </div>
 
-        <!-- sketch overlay that fades in/out via slider -->
-        <div id="tl-sketch-overlay">
-          <svg viewBox="0 0 1200 680" preserveAspectRatio="xMidYMid meet">
-            <rect width="1200" height="680" fill="rgba(11,12,14,0.0)"/>
-            <path d="M 130 440 C 118 325 148 160 242 72 C 258 56 272 52 290 60 C 330 82 420 292 502 440 Z" fill="none" stroke="rgba(210,165,75,0.75)" stroke-width="1.2"/>
-            <path d="M 242 440 C 234 356 256 225 322 150 C 336 134 355 130 372 140 C 408 160 506 342 558 440 Z" fill="none" stroke="rgba(210,165,75,0.65)" stroke-width="1"/>
-            <path d="M 380 440 C 375 390 390 318 430 270 C 443 255 458 252 472 260 C 500 275 546 370 568 440 Z" fill="none" stroke="rgba(210,165,75,0.6)" stroke-width="0.9"/>
-            <path d="M 600 440 C 590 362 614 235 672 165 C 685 148 700 144 716 153 C 748 170 832 348 876 440 Z" fill="none" stroke="rgba(210,165,75,0.65)" stroke-width="1"/>
-            <path d="M 700 440 C 694 380 712 295 752 242 C 763 228 777 224 790 232 C 818 248 876 370 900 440 Z" fill="none" stroke="rgba(210,165,75,0.6)" stroke-width="0.9"/>
-            <path d="M 838 440 C 834 407 845 368 872 345 C 880 338 888 337 896 342 C 912 352 942 400 950 440 Z" fill="none" stroke="rgba(210,165,75,0.5)" stroke-width="0.8"/>
-            <line x1="84" y1="440" x2="1035" y2="440" stroke="rgba(210,165,75,0.4)" stroke-width="0.8"/>
-            <!-- Blueprint grid lines -->
-            <line x1="0" y1="300" x2="1200" y2="300" stroke="rgba(42,90,140,0.15)" stroke-width="0.5" stroke-dasharray="4 4"/>
-            <line x1="0" y1="200" x2="1200" y2="200" stroke="rgba(42,90,140,0.15)" stroke-width="0.5" stroke-dasharray="4 4"/>
-            <line x1="242" y1="0" x2="242" y2="680" stroke="rgba(42,90,140,0.15)" stroke-width="0.5" stroke-dasharray="4 4"/>
-            <line x1="600" y1="0" x2="600" y2="680" stroke="rgba(42,90,140,0.15)" stroke-width="0.5" stroke-dasharray="4 4"/>
-            <text x="108" y="420" fill="rgba(176,64,21,0.7)" font-family="monospace" font-size="9">Concert Hall</text>
-            <text x="645" y="420" fill="rgba(176,64,21,0.7)" font-family="monospace" font-size="9">Opera Theatre</text>
-          </svg>
+        <!-- Drag hint (fades in after load, fades out after first interaction) -->
+        <div id="final-hint">
+          <div id="final-hint-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+            </svg>
+          </div>
+          <span>Drag to rotate &nbsp;·&nbsp; Scroll to zoom</span>
         </div>
+
       </div>
     </div>
     <!-- /photo-section -->
@@ -2499,42 +2468,7 @@
     })();
     </script>
 
-    <!-- ════ TIMELINE SLIDER ════ -->
-    <script>
-    (function () {
-      "use strict";
 
-      var slider  = document.getElementById("tl-slider");
-      var overlay = document.getElementById("tl-sketch-overlay");
-      var wrap    = document.getElementById("tl-wrap");
-      if (!slider || !overlay) return;
-
-      // Reveal the final section and show slider when it enters view
-      var finalSection = document.getElementById("final-section");
-      if (finalSection) {
-        var obs = new IntersectionObserver(function (entries) {
-          if (entries[0].isIntersecting) {
-            finalSection.classList.add("revealed");
-            wrap.classList.add("show");
-          }
-        }, { threshold: 0.05 });
-        obs.observe(finalSection);
-      }
-
-      function updateSlider() {
-        // 0 = reality, 100 = sketch
-        var v = parseInt(slider.value, 10);
-        var sketchOp = v / 100;
-        overlay.style.opacity = String(sketchOp);
-        // dim the background photo proportionally
-        var bg = document.querySelector("#final-bg img");
-        if (bg) bg.style.filter = "brightness(" + (1 - sketchOp * 0.6) + ") saturate(" + (1 - sketchOp * 0.7) + ")";
-      }
-
-      slider.addEventListener("input", updateSlider);
-      updateSlider();
-    })();
-    </script>
 
     <!-- ════ COMPLETION FLASH EFFECT ════ -->
     <script>
@@ -2589,5 +2523,31 @@
       draw();
     })();
     </script>
+  <script>
+    (function () {
+      "use strict";
+      var finalSection = document.getElementById("final-section");
+      if (!finalSection) return;
+
+      // Fade in when section enters viewport
+      var obs = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) {
+          finalSection.classList.add("revealed");
+        }
+      }, { threshold: 0.05 });
+      obs.observe(finalSection);
+
+      // Mark as interacted once user touches the iframe (for hint fade-out)
+      var iframe = document.getElementById("final-iframe");
+      if (iframe) {
+        iframe.addEventListener("mousedown", function () {
+          finalSection.classList.add("interacted");
+        }, { once: true });
+        iframe.addEventListener("touchstart", function () {
+          finalSection.classList.add("interacted");
+        }, { once: true });
+      }
+    })();
+  </script>
   </body>
 </html>
